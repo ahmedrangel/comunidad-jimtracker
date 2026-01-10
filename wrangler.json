@@ -18,14 +18,8 @@
     {
       "binding": "DB",
       "database_name": "comunidad-jimtracker",
-      "database_id": "",
+      "database_id": "4ca0dcad-1191-4783-b21c-da7cec50732c",
       "migrations_dir": ".output/server/db/migrations"
-    }
-  ],
-  "kv_namespaces": [
-    {
-      "binding": "CACHE",
-      "id": "",
     }
   ]
 }
