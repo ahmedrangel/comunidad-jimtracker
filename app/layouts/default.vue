@@ -23,9 +23,11 @@ const { user, loggedIn, clear } = useUserSession();
       <slot />
       <footer class="text-center text-sm text-slate-300 pt-5">
         <span>
-          <NuxtLink href="https://github.com/ahmedrangel/jimtracker" target="_blank" external class="text-emerald-300 font-semibold hover:underline">Creado</NuxtLink>
+          <NuxtLink href="https://github.com/ahmedrangel/comunidad-jimtracker" target="_blank" external class="text-blue-300 font-semibold hover:underline">Creado</NuxtLink>
           con ❤️ por
-          <NuxtLink href="https://github.com/ahmedrangel" target="_blank" external class="text-emerald-300 font-semibold hover:underline">Ahmed Rangel</NuxtLink>
+          <NuxtLink href="https://github.com/ahmedrangel" target="_blank" external class="text-emerald-300 font-semibold hover:underline">Ahmed</NuxtLink>
+          y
+          <NuxtLink href="https://github.com/yizack" target="_blank" external class="text-yellow-300 font-semibold hover:underline">Yizack</NuxtLink>
         </span>
       </footer>
     </div>
