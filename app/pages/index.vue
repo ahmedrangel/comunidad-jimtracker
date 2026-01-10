@@ -78,7 +78,7 @@ const data = [
           </div>
           <div class="flex items-center gap-1">
             <Icon name="simple-icons:twitch" class="w-4 h-4 text-violet-500" />
-            <NuxtLink :to="`https://twitch.tv/${row.original.twitchLogin}`" target="_blank" class="hover:underline">
+            <NuxtLink :to="`/u/${row.original.twitchLogin}`" class="hover:underline">
               <span class="text-xs text-neutral-400">{{ row.original.twitchDisplay }}</span>
             </NuxtLink>
           </div>
