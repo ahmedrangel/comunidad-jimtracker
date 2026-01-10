@@ -147,6 +147,7 @@ export default defineNuxtConfig({
 
   sitemap: {
     discoverImages: false,
+    zeroRuntime: true,
     urls: [
       { loc: "/", priority: 1 }
     ],
