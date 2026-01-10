@@ -32,6 +32,7 @@
     "test:types": "vue-tsc -b --noEmit"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.83",
     "@iconify-json/simple-icons": "^1.2.65",
     "@libsql/client": "^0.17.0",
     "@nuxt/eslint": "^1.12.1",

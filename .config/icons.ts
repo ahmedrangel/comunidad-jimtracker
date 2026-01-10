@@ -1,4 +1,5 @@
 export default [
   "simple-icons:riotgames",
-  "simple-icons:twitch"
+  "simple-icons:twitch",
+  "lucide:chevron-down"
 ];
