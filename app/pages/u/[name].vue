@@ -50,13 +50,13 @@ console.info(data.value);
       </div>
       <div class="lg:col-span-23 md:col-span-3 sm:col-span-24 grid lg:grid-cols-2 gap-4">
         <template v-if="data.riotAccounts?.length">
-          <div v-for="account in data.riotAccounts" :key="account.puuid" class="p-2 relative overflow-hidden rounded-sm border border-accented px-4 flex flex-col justify-center gap-2">
-            <div class="flex items-center justify-center gap-2">
+          <div v-for="account in data.riotAccounts" :key="account.puuid" class="relative overflow-hidden rounded-sm border border-accented p-4 flex flex-col justify-center gap-2 bg-black/20">
+            <div class="flex items-center justify-center gap-2 text-xl">
               <img :src="`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${account.profileIcon}.jpg`" class="w-10 h-10 rounded-full border border-white/10 shadow-lg shadow-black/20" :alt="`Icono de perfil de ${account.gameName}`">
-              <span class="font-semibold text-lg">{{ account.gameName }}</span>
+              <span class="font-semibold">{{ account.gameName }}</span>
               <span class="text-neutral-400">#{{ account.tagLine }}</span>
             </div>
-            <div class="absolute top-2 right-2 bg-black/50 text-xs text-white rounded px-2 py-1">
+            <div class="absolute top-2 right-2 bg-black/50 border border-white/10 text-xs text-white rounded px-2 py-1">
               {{ regionMap.find(r => r.value === account.region)?.label }}
             </div>
             <div class="flex flex-col items-center gap-2">
@@ -75,7 +75,7 @@ console.info(data.value);
             </div>
           </div>
         </template>
-        <div v-if="loggedIn" class="relative overflow-hidden rounded-sm border border-dashed border-accented opacity-75 px-4 flex items-center justify-center h-48">
+        <div v-if="loggedIn" class="relative overflow-hidden rounded-sm border border-dashed border-accented flex items-center justify-center h-48">
           <UModal v-model:open="modalOpen" title="Agregar Riot Account">
             <template #body>
               <div class="flex flex-col gap-4">
@@ -98,8 +98,8 @@ console.info(data.value);
                 </div>
               </div>
             </template>
-            <UButton variant="subtle" @click="modalOpen = true">
-              +
+            <UButton variant="soft" class="w-full h-full flex items-center justify-center opacity-75" @click="modalOpen = true">
+              <Icon name="lucide:plus" class="w-8 h-8" />
             </UButton>
           </UModal>
         </div>
