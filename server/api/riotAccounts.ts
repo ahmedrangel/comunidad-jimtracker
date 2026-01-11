@@ -13,5 +13,5 @@ export default defineEventHandler(async () => {
     ...account,
     eloValue: eloToValue(account.tier || "", account.division || "", account.lp || 0),
     user: userMap.get(account.twitchId) || null
-  })).sort((a, b) => b.eloValue - a.eloValue);
+  })).sort((a, b) => a.gameName.localeCompare(b.gameName)).sort((a, b) => b.eloValue - a.eloValue);
 });
