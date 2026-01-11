@@ -109,7 +109,8 @@ export default defineNuxtConfig({
     db: {
       dialect: "sqlite",
       casing: "snake_case"
-    }
+    },
+    cache: true
   },
 
   vite: {

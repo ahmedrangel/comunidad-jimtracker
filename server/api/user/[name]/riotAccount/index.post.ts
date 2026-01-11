@@ -1,7 +1,14 @@
 import { Constants, LolApi, RiotApi } from "twisted";
 
 export default defineEventHandler(async (event) => {
-  const { id } = getRouterParams(event);
+  const { name } = getRouterParams(event);
+
+  const twitchId = await getTwitchIdByLogin(event, name);
+
+  if (!twitchId) {
+    throw createError({ statusCode: 404, message: "Usuario no encontrado" });
+  }
+
   const body = await readBody(event);
 
   if (!body.gameName || !body.tagLine || !body.region || Number.isNaN(body.iconVerificationId)) {
@@ -36,7 +43,7 @@ export default defineEventHandler(async (event) => {
   const soloQueue = leagueData?.response.find(entry => entry.queueType === Constants.Queues.RANKED_SOLO_5x5);
 
   const newAccount = await db.insert(tables.riotAccounts).values({
-    twitchId: id,
+    twitchId,
     puuid: account.response.puuid,
     gameName: account.response.gameName,
     tagLine: account.response.tagLine,

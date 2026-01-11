@@ -3,7 +3,10 @@ import { AppTokenAuthProvider } from "@twurple/auth";
 import { ApiClient } from "@twurple/api";
 
 export default defineEventHandler(async (event) => {
-  const { id } = getRouterParams(event);
+  const { name } = getRouterParams(event);
+
+  const twitchId = await getTwitchIdByLogin(event, name);
+
   const config = useRuntimeConfig(event);
   const riot = new RiotApi(config.riot.apiKey);
   const lol = new LolApi(config.riot.apiKey);
@@ -34,7 +37,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const newUserInfo = await client.users.getUserById(id);
+  const newUserInfo = await client.users.getUserById(twitchId);
 
   if (newUserInfo) {
     const updateUser = await db.update(tables.users).set({
@@ -42,7 +45,7 @@ export default defineEventHandler(async (event) => {
       twitchDisplay: newUserInfo.displayName,
       twitchProfileImage: newUserInfo.profilePictureUrl,
       updatedAt: unixepoch({ mode: "ms" })
-    }).where(eq(tables.users.twitchId, id)).returning().get();
+    }).where(eq(tables.users.twitchId, twitchId)).returning().get();
 
     const updateRiotAccounts = newRiotAccountData.map((accountData) => {
       return db.update(tables.riotAccounts).set({
@@ -56,7 +59,7 @@ export default defineEventHandler(async (event) => {
         losses: accountData.losses,
         updatedAt: unixepoch({ mode: "ms" })
       }).where(and(
-        eq(tables.riotAccounts.twitchId, id),
+        eq(tables.riotAccounts.twitchId, twitchId),
         eq(tables.riotAccounts.puuid, accountData.puuid)
       )).returning().get();
     });

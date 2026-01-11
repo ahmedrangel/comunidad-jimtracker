@@ -27,7 +27,7 @@ const form = reactive({
 const addAccount = async () => {
   if (!loggedIn.value || !user.value) return;
   loading.value = true;
-  const response = await $fetch(`/api/user/${user.value.twitchId}/riotAccount`, {
+  const response = await $fetch(`/api/user/${name}/riotAccount`, {
     method: "POST",
     body: {
       gameName: form.gameName,
@@ -59,7 +59,7 @@ const removeAccount = async (puuid: string) => {
   if (!loggedIn.value || !user.value) return;
   const confirm = window.confirm("¿Estás seguro de que deseas eliminar esta cuenta?");
   if (!confirm) return;
-  await $fetch(`/api/user/${user.value.twitchId}/riotAccount`, {
+  await $fetch(`/api/user/${name}/riotAccount`, {
     method: "DELETE",
     query: { puuid }
   }).catch(() => null);
@@ -68,7 +68,7 @@ const removeAccount = async (puuid: string) => {
 
 const updateProfile = async () => {
   updateLoading.value = true;
-  const response = await $fetch(`/api/user/${userInfo.value.twitchId}/update`, {
+  const response = await $fetch(`/api/user/${name}/update`, {
     method: "POST",
     body: {
       riotAccounts: riotAccounts.value.map(account => ({
