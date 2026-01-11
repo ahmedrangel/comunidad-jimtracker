@@ -102,7 +102,9 @@ export default defineNuxtConfig({
     experimental: {
       tasks: true
     },
-    scheduledTasks: {}
+    scheduledTasks: {
+      "1 * * * *": ["updateLeagueData"]
+    }
   },
 
   hub: {
