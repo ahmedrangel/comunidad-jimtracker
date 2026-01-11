@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const riot = new RiotApi(config.riot.apiKey);
   const lol = new LolApi(config.riot.apiKey);
   const authProvider = new AppTokenAuthProvider(config.oauth.twitch.clientId, config.oauth.twitch.clientSecret);
-  const client = new ApiClient({ authProvider });
+  const twitch = new ApiClient({ authProvider });
   const body = await readBody(event);
   const { riotAccounts } = body;
 
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const newUserInfo = await client.users.getUserById(twitchId);
+  const newUserInfo = await twitch.users.getUserById(twitchId);
 
   if (newUserInfo) {
     const updateUser = await db.update(tables.users).set({
