@@ -20,6 +20,7 @@ export default defineEventHandler(async () => {
     twitchId: tables.users.twitchId,
     twitchLogin: tables.users.twitchLogin,
     twitchDisplay: tables.users.twitchDisplay,
+    twitchProfileImage: tables.users.twitchProfileImage,
     country: tables.users.country
   }).from(tables.users).where(or(...twitchIds.map(id => eq(tables.users.twitchId, id)))).all();
 

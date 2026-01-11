@@ -46,14 +46,14 @@ const accounts = data.value?.sort((a, b) => b.eloValue - a.eloValue) || [];
       <template #user-cell="{ row }">
         <div class="flex flex-col items-start gap-0.5">
           <div class="flex items-center gap-1">
-            <Icon name="simple-icons:riotgames" class="w-4 h-4 text-red-500" />
+            <Icon name="simple-icons:riotgames" class="w-5 h-5 text-red-500" />
             <div class="flex items-center gap-2">
-              <span class="font-semibold">{{ row.original.gameName }} #{{ row.original.tagLine }}</span>
+              <NuxtLink :to="`https://op.gg/es/lol/summoners/${getRegionLabel(row.original.region)}/${row.original.gameName}-${row.original.tagLine}`" target="_blank" external class="font-semibold hover:underline">{{ row.original.gameName }} #{{ row.original.tagLine }}</NuxtLink>
               <Twemoji v-if="row.original.user.country" class="max-w-fit" :emoji="row.original.user.country" png size="1.5em" />
             </div>
           </div>
           <div class="flex items-center gap-1">
-            <Icon name="simple-icons:twitch" class="w-4 h-4 text-violet-500" />
+            <img v-if="row.original.user.twitchProfileImage" :src="row.original.user.twitchProfileImage" class="w-5 h-5 rounded-sm" :alt="row.original.user.twitchDisplay">
             <NuxtLink :to="`/u/${row.original.user.twitchLogin}`" class="hover:underline">
               <span class="text-xs text-neutral-400 font-semibold">{{ row.original.user.twitchDisplay }}</span>
             </NuxtLink>
