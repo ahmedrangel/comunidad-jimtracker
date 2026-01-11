@@ -28,7 +28,7 @@ const form = useFormState({
 const addAccount = async () => {
   if (!loggedIn.value || !user.value) return;
   loading.value = true;
-  const response = await $fetch(`/api/user/${name}/riot-account`, {
+  $fetch(`/api/user/${name}/riot-account`, {
     method: "POST",
     body: {
       gameName: form.value.gameName,
@@ -36,16 +36,8 @@ const addAccount = async () => {
       region: form.value.region,
       iconVerificationId: form.value.iconVerificationId
     }
-  }).catch((err) => {
-    toast.add({
-      title: "Error",
-      description: err.data?.message || "Ocurrió un error al agregar la cuenta de Riot.",
-      color: "error"
-    });
-    return null;
-  });
-  loading.value = false;
-  if (response && data.value) {
+  }).then((response) => {
+    if (!data.value) return;
     riotAccounts.value.push(response);
     modalOpen.value = false;
     form.reset();
@@ -54,22 +46,31 @@ const addAccount = async () => {
       description: "Cuenta de Riot agregada correctamente.",
       color: "success"
     });
-  }
+  }).catch((err) => {
+    toast.add({
+      title: "Error",
+      description: err.data?.message || "Ocurrió un error al agregar la cuenta de Riot.",
+      color: "error"
+    });
+  }).finally(() => {
+    loading.value = false;
+  });
 };
 
 const removeAccount = async (puuid: string) => {
   if (!loggedIn.value || !user.value) return;
-  const confirm = window.confirm("¿Estás seguro de que deseas eliminar esta cuenta?");
-  if (!confirm) return;
-  await $fetch(`/api/user/${name}/riot-account/${puuid}`, {
+  if (!confirm("¿Estás seguro de que deseas eliminar esta cuenta?")) return;
+
+  $fetch(`/api/user/${name}/riot-account/${puuid}`, {
     method: "DELETE"
-  }).catch(() => null);
+  }).catch(() => {});
+
   riotAccounts.value = riotAccounts.value.filter((acc: any) => acc.puuid !== puuid);
 };
 
 const updateProfile = async () => {
   updateLoading.value = true;
-  const response = await $fetch(`/api/user/${name}/update`, {
+  $fetch(`/api/user/${name}/update`, {
     method: "POST",
     body: {
       riotAccounts: riotAccounts.value.map(account => ({
@@ -77,9 +78,7 @@ const updateProfile = async () => {
         region: account.region
       }))
     }
-  }).catch(() => null);
-  updateLoading.value = false;
-  if (response) {
+  }).then((response) => {
     userInfo.value = response.user;
     riotAccounts.value = response.riotAccounts;
     toast.add({
@@ -87,7 +86,9 @@ const updateProfile = async () => {
       description: "Perfil actualizado correctamente.",
       color: "success"
     });
-  }
+  }).catch(() => {}).finally(() => {
+    updateLoading.value = false;
+  });
 };
 
 const updateCooldown = import.meta.dev ? 0 : 120; // segundos
