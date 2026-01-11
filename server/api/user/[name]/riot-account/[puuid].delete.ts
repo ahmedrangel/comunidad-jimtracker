@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const twitchId = await getTwitchIdByLogin(event, params.name);
 
   if (!twitchId) {
-    throw createError({ statusCode: 404, message: "Usuario no encontrado" });
+    throw createError({ status: 404, message: "Usuario no encontrado" });
   }
 
   const deleteResult = await db.delete(tables.riotAccounts).where(and(
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     eq(tables.riotAccounts.puuid, params.puuid)
   )).returning().get();
   if (!deleteResult) {
-    throw createError({ statusCode: 404, message: "Cuenta de Riot no encontrada" });
+    throw createError({ status: 404, message: "Cuenta de Riot no encontrada" });
   }
   return deleteResult;
 });

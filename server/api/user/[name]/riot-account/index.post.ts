@@ -8,13 +8,13 @@ export default defineEventHandler(async (event) => {
   const twitchId = await getTwitchIdByLogin(event, params.name);
 
   if (!twitchId) {
-    throw createError({ statusCode: 404, message: "Usuario no encontrado" });
+    throw createError({ status: 404, message: "Usuario no encontrado" });
   }
 
   const body = await readBody(event);
 
   if (!body.gameName || !body.tagLine || !body.region || Number.isNaN(body.iconVerificationId)) {
-    throw createError({ statusCode: 400, message: "Campos requeridos faltantes" });
+    throw createError({ status: 400, message: "Campos requeridos faltantes" });
   }
 
   const { gameName, tagLine, region } = body;
