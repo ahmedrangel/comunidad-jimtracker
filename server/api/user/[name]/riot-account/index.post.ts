@@ -1,9 +1,11 @@
 import { Constants, LolApi, RiotApi } from "twisted";
 
 export default defineEventHandler(async (event) => {
-  const { name } = getRouterParams(event);
+  const params = await getValidatedRouterParams(event, z.object({
+    name: z.string()
+  }).parse);
 
-  const twitchId = await getTwitchIdByLogin(event, name);
+  const twitchId = await getTwitchIdByLogin(event, params.name);
 
   if (!twitchId) {
     throw createError({ statusCode: 404, message: "Usuario no encontrado" });

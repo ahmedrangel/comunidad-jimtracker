@@ -3,9 +3,11 @@ import { AppTokenAuthProvider } from "@twurple/auth";
 import { ApiClient } from "@twurple/api";
 
 export default defineEventHandler(async (event) => {
-  const { name } = getRouterParams(event);
+  const params = await getValidatedRouterParams(event, z.object({
+    name: z.string()
+  }).parse);
 
-  const twitchId = await getTwitchIdByLogin(event, name);
+  const twitchId = await getTwitchIdByLogin(event, params.name);
 
   const config = useRuntimeConfig(event);
   const riot = new RiotApi(config.riot.apiKey);

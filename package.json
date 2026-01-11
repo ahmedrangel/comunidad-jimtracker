@@ -54,7 +54,8 @@
     "twisted": "^1.72.2",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.2",
-    "wrangler": "^4.58.0"
+    "wrangler": "^4.58.0",
+    "zod": "^4.3.5"
   },
   "packageManager": "pnpm@10.28.0"
 }

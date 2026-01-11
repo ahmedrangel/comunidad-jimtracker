@@ -1,3 +1,5 @@
+export { z } from "zod";
+
 export const LEAGUE_TIERS = [
   { id: "IRON", divisions: ["IV", "III", "II", "I"], color: "#6B4E24" },
   { id: "BRONZE", divisions: ["IV", "III", "II", "I"], color: "#A0522D" },

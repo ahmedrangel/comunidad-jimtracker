@@ -1,5 +1,8 @@
 export default defineEventHandler(async (event) => {
-  const { name } = getRouterParams(event);
+  const params = await getValidatedRouterParams(event, z.object({
+    name: z.string()
+  }).parse);
+
   const userInfo = await db.select({
     twitchId: tables.users.twitchId,
     twitchLogin: tables.users.twitchLogin,
@@ -9,7 +12,7 @@ export default defineEventHandler(async (event) => {
     bio: tables.users.bio,
     badges: tables.users.badges,
     updatedAt: tables.users.updatedAt
-  }).from(tables.users).where(eq(tables.users.twitchLogin, name.toLowerCase())).get();
+  }).from(tables.users).where(eq(tables.users.twitchLogin, params.name.toLowerCase())).get();
 
   if (!userInfo) {
     throw createError({ statusCode: 404, statusMessage: "User not found" });
