@@ -24,6 +24,11 @@ export default defineOAuthTwitchEventHandler({
 
     await setUserSession(event, { user });
 
-    return sendRedirect(event, `/u/${user.twitchLogin}`);
+    return send(event, `
+      <script>
+        localStorage.removeItem('temp-nuxt-auth-utils-popup');
+        window.close();
+      </script>
+    `, "text/html");
   }
 });
