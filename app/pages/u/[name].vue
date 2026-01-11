@@ -59,9 +59,8 @@ const removeAccount = async (puuid: string) => {
   if (!loggedIn.value || !user.value) return;
   const confirm = window.confirm("¿Estás seguro de que deseas eliminar esta cuenta?");
   if (!confirm) return;
-  await $fetch(`/api/user/${name}/riot-account`, {
-    method: "DELETE",
-    query: { puuid }
+  await $fetch(`/api/user/${name}/riot-account/${puuid}`, {
+    method: "DELETE"
   }).catch(() => null);
   riotAccounts.value = riotAccounts.value.filter((acc: any) => acc.puuid !== puuid);
 };

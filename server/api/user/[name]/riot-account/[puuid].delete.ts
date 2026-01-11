@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const { name } = getRouterParams(event);
+  const { name, puuid } = getRouterParams(event);
 
   const twitchId = await getTwitchIdByLogin(event, name);
 
@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, message: "Usuario no encontrado" });
   }
 
-  const { puuid } = getQuery<{ puuid: string }>(event);
   const deleteResult = await db.delete(tables.riotAccounts).where(and(
     eq(tables.riotAccounts.twitchId, twitchId),
     eq(tables.riotAccounts.puuid, puuid)
