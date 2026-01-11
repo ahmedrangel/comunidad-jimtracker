@@ -26,6 +26,7 @@ const toast = useToast();
 const isModalOpen = ref(false);
 const isLoading = ref(false);
 const isUpdating = ref(false);
+const maxAccounts = 4;
 
 const form = useFormState({
   gameName: "",
@@ -100,7 +101,7 @@ const updateProfile = async () => {
   });
 };
 
-const updateCooldown = import.meta.dev ? 0 : 120; // segundos
+const updateCooldown = import.meta.dev ? 10 : 120; // segundos
 const now = ref(Date.now());
 let intervalId: number | undefined;
 
@@ -133,6 +134,7 @@ onUnmounted(() => {
     <div class="flex items-center gap-2 mb-2">
       <span class="font-bold text-3xl">{{ userInfo.twitchDisplay }}</span>
       <Twemoji v-if="userInfo.country" :emoji="userInfo.country" png size="2em" />
+      <span class="ms-auto">{{ riotAccounts.length }} / {{ maxAccounts }}</span>
     </div>
     <div class="grid lg:grid-cols-5 lg:grid-rows-2 md:grid-cols-3 md:grid-rows-1 gap-4">
       <div class="row-span-2 flex flex-col gap-1">
@@ -189,7 +191,7 @@ onUnmounted(() => {
             </div>
           </div>
         </template>
-        <div v-if="isOwner" class="relative overflow-hidden rounded-sm border border-dashed border-accented flex items-center justify-center h-full">
+        <div v-if="isOwner && riotAccounts.length < maxAccounts" class="relative overflow-hidden rounded-sm border border-dashed border-accented flex items-center justify-center h-full">
           <UModal v-model:open="isModalOpen" title="Agregar Riot Account">
             <template #body>
               <UForm @submit.prevent="addAccount">
