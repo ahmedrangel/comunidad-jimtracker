@@ -174,16 +174,15 @@ onUnmounted(() => {
               <UForm @submit.prevent="addAccount">
                 <div class="flex flex-col gap-4">
                   <UFieldGroup class="w-full">
-                    <UInput v-model="form.gameName" label="gameName" placeholder="Nombre" :ui="{ root: 'w-full' }" required />
+                    <UInput v-model.trim="form.gameName" label="gameName" placeholder="Nombre" :ui="{ root: 'w-full' }" required />
                     <UBadge color="neutral" variant="outline" label="#" />
-                    <UInput v-model="form.tagLine" label="tagLine" placeholder="Tag" :ui="{ root: 'w-full' }" required />
+                    <UInput v-model.trim="form.tagLine" label="tagLine" placeholder="Tag" :ui="{ root: 'w-full' }" required />
                   </UFieldGroup>
                   <USelect
                     v-model="form.region"
                     label="region"
                     class="w-full"
                     placeholder="Región"
-                    trailing-icon="lucide:chevron-down"
                     :items="regionMap"
                     required
                   />
