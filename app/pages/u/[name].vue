@@ -86,6 +86,24 @@ const updateProfile = async () => {
     });
   }
 };
+
+const updateCooldown = 120; // segundos
+const now = ref(Date.now());
+let intervalId: number | undefined;
+
+const lastUpdate = computed(() => userInfo.value?.updatedAt ? new Date(userInfo.value.updatedAt).getTime() : 0);
+const secondsSinceUpdate = computed(() => Math.floor((now.value - lastUpdate.value) / 1000));
+const canUpdate = computed(() => secondsSinceUpdate.value >= updateCooldown);
+const secondsToAvailable = computed(() => Math.max(0, updateCooldown - secondsSinceUpdate.value));
+
+onMounted(() => {
+  intervalId = window.setInterval(() => {
+    now.value = Date.now();
+  }, 500);
+});
+onUnmounted(() => {
+  if (intervalId) clearInterval(intervalId);
+});
 </script>
 
 <template>
@@ -103,9 +121,10 @@ const updateProfile = async () => {
         <div v-if="userInfo.bio" class="p-3 bg-neutral-500/10 rounded-sm border border-white/10">
           {{ userInfo.bio }}
         </div>
-        <UButton class="w-full py-4 flex items-center gap-2" variant="subtle" color="info" :loading="updateLoading" @click="updateProfile">
+        <UButton class="w-full py-4 flex items-center gap-2" variant="subtle" color="info" :loading="updateLoading" :disabled="!canUpdate || updateLoading" @click="updateProfile">
           <Icon v-if="!updateLoading" name="lucide:refresh-cw" class="w-5 h-5" />
-          <span>{{ updateLoading ? "Actualizando..." : "Actualizar" }}</span>
+          <span v-if="canUpdate">{{ updateLoading ? "Actualizando..." : "Actualizar" }}</span>
+          <span v-else>Disponible en <ClientOnly>{{ secondsToAvailable }}s</ClientOnly></span>
         </UButton>
       </div>
       <div class="lg:col-span-23 md:col-span-3 sm:col-span-24 grid lg:grid-cols-2 gap-4">
