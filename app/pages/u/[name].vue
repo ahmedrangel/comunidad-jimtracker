@@ -67,9 +67,8 @@ const removeAccount = async (puuid: string) => {
 };
 
 const updateProfile = async () => {
-  if (!loggedIn.value || !user.value) return;
   updateLoading.value = true;
-  const response = await $fetch(`/api/user/${user.value.twitchId}/update`, {
+  const response = await $fetch(`/api/user/${userInfo.value.twitchId}/update`, {
     method: "POST",
     body: {
       riotAccounts: riotAccounts.value
