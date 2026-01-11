@@ -8,7 +8,7 @@ const { user, loggedIn } = useUserSession();
 const isOwner = computed(() => loggedIn.value && user.value?.twitchLogin.toLowerCase() === name.toLowerCase());
 
 if (!data.value) {
-  throw createError({ status: 404, message: "Usuario no encontrado", fatal: true });
+  throw createError({ status: ErrorCode.NOT_FOUND, message: "Usuario no encontrado", fatal: true });
 }
 
 const userInfo = ref(data.value?.user);

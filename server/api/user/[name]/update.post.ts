@@ -74,5 +74,5 @@ export default defineEventHandler(async (event) => {
     };
   }
 
-  throw createError({ status: 404, statusMessage: "User not found" });
+  throw createError({ status: ErrorCode.NOT_FOUND, statusMessage: "User not found" });
 });

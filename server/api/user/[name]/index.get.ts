@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   }).from(tables.users).where(eq(tables.users.twitchLogin, params.name.toLowerCase())).get();
 
   if (!userInfo) {
-    throw createError({ status: 404, statusMessage: "User not found" });
+    throw createError({ status: ErrorCode.NOT_FOUND, statusMessage: "User not found" });
   }
 
   const riotAccounts = await db.select().from(tables.riotAccounts).where(eq(tables.riotAccounts.twitchId, userInfo.twitchId)).all();

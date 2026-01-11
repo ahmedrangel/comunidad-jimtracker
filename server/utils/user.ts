@@ -9,7 +9,7 @@ export const getTwitchIdByLogin = defineCachedFunction(async (event: H3Event, lo
 
   if (!user || !user.twitchId) {
     throw createError({
-      status: 404,
+      status: ErrorCode.NOT_FOUND,
       message: "Usuario no encontrado"
     });
   }
