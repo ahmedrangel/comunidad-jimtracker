@@ -17,7 +17,8 @@ const toast = useToast();
 const modalOpen = ref(false);
 const loading = ref(false);
 const updateLoading = ref(false);
-const form = reactive({
+
+const form = useFormState({
   gameName: "",
   tagLine: "",
   region: "",
@@ -30,10 +31,10 @@ const addAccount = async () => {
   const response = await $fetch(`/api/user/${name}/riot-account`, {
     method: "POST",
     body: {
-      gameName: form.gameName,
-      tagLine: form.tagLine,
-      region: form.region,
-      iconVerificationId: form.iconVerificationId
+      gameName: form.value.gameName,
+      tagLine: form.value.tagLine,
+      region: form.value.region,
+      iconVerificationId: form.value.iconVerificationId
     }
   }).catch((err) => {
     toast.add({
@@ -47,6 +48,7 @@ const addAccount = async () => {
   if (response && data.value) {
     riotAccounts.value.push(response);
     modalOpen.value = false;
+    form.reset();
     toast.add({
       title: "Éxito",
       description: "Cuenta de Riot agregada correctamente.",
