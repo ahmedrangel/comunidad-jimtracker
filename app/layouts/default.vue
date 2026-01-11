@@ -1,5 +1,10 @@
 <script setup lang="ts">
-const { user, loggedIn, clear } = useUserSession();
+const { user, loggedIn, clear, openInPopup } = useUserSession();
+
+watch(loggedIn, (value) => {
+  if (!value || !user.value?.twitchLogin) return;
+  navigateTo(`/u/${user.value.twitchLogin}`);
+});
 </script>
 
 <template>
@@ -14,10 +19,10 @@ const { user, loggedIn, clear } = useUserSession();
         <Icon name="lucide:log-out" class="w-6 h-6" />
         <span>Salir</span>
       </button>
-      <NuxtLink v-else to="/auth/twitch" class="nav-link border border-white/0 font-semibold px-3 py-1 rounded hover:bg-violet-700 hover:backdrop-blur transition-colors duration-200 flex items-center gap-2 bg-violet-800" external>
+      <button v-else class="nav-link border border-white/0 font-semibold px-3 py-1 rounded hover:bg-violet-700 hover:backdrop-blur transition-colors duration-200 flex items-center gap-2 bg-violet-800" @click="openInPopup('/auth/twitch')">
         <Icon name="simple-icons:twitch" class="w-5 h-5" />
         <span>Unirse</span>
-      </NuxtLink>
+      </button>
     </nav>
     <div class="lg:container mx-auto py-5 px-2">
       <slot />
