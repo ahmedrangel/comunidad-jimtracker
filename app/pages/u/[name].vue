@@ -1,19 +1,21 @@
 <script setup lang="ts">
 const { name } = useRoute("u-name").params;
 
-const { data } = await useFetch(`/api/users/${name}`);
+const { data: userInfo } = await useFetch(`/api/users/${name}`);
+
 const { user, loggedIn } = useUserSession();
 
 const isOwner = computed(() => loggedIn.value && user.value?.twitchLogin.toLowerCase() === name.toLowerCase());
 
-if (!data.value) {
+if (!userInfo.value) {
   throw createError({ status: ErrorCode.NOT_FOUND, message: "Usuario no encontrado" });
 }
 
-const toast = useToast();
+const { data: riotAccounts } = await useFetch(`/api/users/${name}/riot-accounts`, {
+  default: () => [] as JimRiotAccount[]
+});
 
-const userInfo = ref(data.value?.user);
-const riotAccounts = ref(data.value?.riotAccounts || []);
+const toast = useToast();
 
 const isModalOpen = ref(false);
 const isLoading = ref(false);
@@ -38,7 +40,6 @@ const addAccount = async () => {
       iconVerificationId: form.value.iconVerificationId
     }
   }).then((response) => {
-    if (!data.value) return;
     riotAccounts.value.push(response);
     isModalOpen.value = false;
     form.reset();

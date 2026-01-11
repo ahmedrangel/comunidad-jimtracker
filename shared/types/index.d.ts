@@ -12,6 +12,23 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
+
+  interface JimRiotAccount {
+    puuid: string;
+    twitchId: string;
+    gameName: string;
+    tagLine: string;
+    region: string;
+    tier: string | null;
+    division: string | null;
+    lp: number | null;
+    wins: number | null;
+    losses: number | null;
+    profileIcon: number | null;
+    verified: boolean;
+    createdAt: number;
+    updatedAt: number;
+  }
 }
 
 export {};
