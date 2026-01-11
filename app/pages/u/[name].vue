@@ -118,6 +118,10 @@ onMounted(() => {
   intervalId = window.setInterval(() => {
     now.value = Date.now();
   }, 500);
+
+  if (canUpdate.value && !isUpdating.value) {
+    updateProfile();
+  }
 });
 onUnmounted(() => {
   if (intervalId) clearInterval(intervalId);
