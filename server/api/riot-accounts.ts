@@ -27,10 +27,12 @@ export default defineEventHandler(async () => {
   // mapear los usuarios por su twitchId para fácil acceso
   const userMap = new Map(users.map(user => [user.twitchId, user]));
 
-  return riotAccounts.map(({ twitchId, ...account }, index) => ({
-    rank: index + 1,
+  return riotAccounts.map(({ twitchId, ...account }) => ({
     ...account,
     eloValue: eloToValue(account.tier || "", account.division || "", account.lp || 0),
     user: userMap.get(twitchId) || null
-  })).sort((a, b) => a.gameName.localeCompare(b.gameName)).sort((a, b) => b.eloValue - a.eloValue);
+  })).sort((a, b) => a.gameName.localeCompare(b.gameName)).sort((a, b) => b.eloValue - a.eloValue).map((data, index) => ({
+    rank: index + 1,
+    ...data
+  }));
 });
