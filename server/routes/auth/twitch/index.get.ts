@@ -27,7 +27,12 @@ export default defineOAuthTwitchEventHandler({
     return send(event, `
       <script>
         localStorage.removeItem('temp-nuxt-auth-utils-popup');
-        window.close();
+        if (window.opener) {
+          window.close();
+        }
+        else {
+          window.location.href = '/u/${user.twitchLogin}';
+        }
       </script>
     `, "text/html");
   }
