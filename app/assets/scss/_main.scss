@@ -1,3 +1,7 @@
+img {
+  object-fit: contain;
+}
+
 .scale-on-hover {
   transition: transform .2s ease-in-out
 }
