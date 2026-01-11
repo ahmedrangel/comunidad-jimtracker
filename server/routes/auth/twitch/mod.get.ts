@@ -12,7 +12,7 @@ export default defineOAuthTwitchEventHandler({
     const twitchApi = new ApiClient({ authProvider: provider });
     const moderatedChannelsPagination = twitchApi.moderation.getModeratedChannelsPaginated(twitch.id);
     const moderatedChannels = await moderatedChannelsPagination.getAll();
-    if (SITE.twitchId in moderatedChannels.map(c => c.id)) {
+    if (moderatedChannels.map(c => c.id).includes(SITE.twitchId)) {
       await db.insert(tables.channelModerators).values({
         twitchId: twitch.id,
         accessToken: result.tokens.access_token,
