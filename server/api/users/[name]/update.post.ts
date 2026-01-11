@@ -20,16 +20,21 @@ export default defineEventHandler(async (event) => {
   const newRiotAccountData = [];
   if (riotAccounts && riotAccounts.length) {
     for (const account of riotAccounts) {
-      const accountData = await riot.Account.getByPUUID(account.puuid, Constants.regionToRegionGroupForAccountAPI(account.region));
-      const summonerData = await lol.Summoner.getByPUUID(account.puuid, account.region);
-      const leagueData = await lol.League.byPUUID(account.puuid, account.region);
-      const soloQueue = leagueData?.response.find(entry => entry.queueType === Constants.Queues.RANKED_SOLO_5x5);
+      const [accountData, summonerData, leagueData] = await Promise.allSettled([
+        riot.Account.getByPUUID(account.puuid, Constants.regionToRegionGroupForAccountAPI(account.region)),
+        lol.Summoner.getByPUUID(account.puuid, account.region),
+        lol.League.byPUUID(account.puuid, account.region)
+      ]);
+      if (accountData.status === "rejected" || summonerData.status === "rejected" || leagueData.status === "rejected") {
+        continue;
+      }
+      const soloQueue = leagueData.value.response.find(entry => entry.queueType === Constants.Queues.RANKED_SOLO_5x5);
 
       newRiotAccountData.push({
-        puuid: accountData.response.puuid,
-        gameName: accountData.response.gameName,
-        tagLine: accountData.response.tagLine,
-        profileIcon: summonerData.response.profileIconId,
+        puuid: accountData.value.response.puuid,
+        gameName: accountData.value.response.gameName,
+        tagLine: accountData.value.response.tagLine,
+        profileIcon: summonerData.value.response.profileIconId,
         tier: soloQueue?.tier || null,
         division: soloQueue?.rank || null,
         lp: soloQueue?.leaguePoints || null,
@@ -42,7 +47,7 @@ export default defineEventHandler(async (event) => {
   const newUserInfo = await twitch.users.getUserById(twitchId);
 
   if (newUserInfo) {
-    const updateUser = await db.update(tables.users).set({
+    const updateUser = db.update(tables.users).set({
       twitchLogin: newUserInfo.name,
       twitchDisplay: newUserInfo.displayName,
       twitchProfileImage: newUserInfo.profilePictureUrl,
