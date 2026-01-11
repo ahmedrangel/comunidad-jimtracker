@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { name } = useRoute("u-name").params;
 
-const { data: data } = await useFetch(`/api/user/${name}`);
+const { data } = await useFetch(`/api/user/${name}`);
 const { user, loggedIn } = useUserSession();
 
 const isOwner = computed(() => loggedIn.value && user.value?.twitchLogin.toLowerCase() === name.toLowerCase());
