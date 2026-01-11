@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   const twitchId = await getTwitchIdByLogin(event, params.name);
 
-  if (user.twitchId !== twitchId) {
+  if (user.twitchLogin !== params.name || user.twitchId !== twitchId) {
     throw createError({ status: ErrorCode.FORBIDDEN, message: "No tienes permiso para realizar esta acción" });
   }
 
