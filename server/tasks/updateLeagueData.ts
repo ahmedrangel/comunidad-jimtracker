@@ -17,7 +17,9 @@ export default defineTask({
       division: tables.riotAccounts.division,
       wins: tables.riotAccounts.wins,
       losses: tables.riotAccounts.losses
-    }).from(tables.riotAccounts).orderBy(asc(tables.riotAccounts.updatedAt)).limit(100).all();
+    }).from(tables.riotAccounts).orderBy(asc(tables.riotAccounts.updatedAt)).where(
+      isNotNull(tables.riotAccounts.tier)
+    ).limit(100).all();
 
     const config = useRuntimeConfig();
     const lol = new LolApi(config.riot.apiKey);
