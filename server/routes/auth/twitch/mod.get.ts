@@ -3,7 +3,7 @@ import { ApiClient } from "@twurple/api";
 
 export default defineOAuthTwitchEventHandler({
   config: {
-    scope: ["user:read:moderated_channels", "moderator:read:followers"]
+    scope: ["user:read:moderated_channels", "moderator:read:followers", "channel:read:subscriptions"]
   },
   async onSuccess (event, result: { user: TwitchUser, tokens: any }) {
     const twitch = result.user;
