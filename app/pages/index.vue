@@ -38,7 +38,7 @@ const accounts = data.value?.sort((a, b) => b.eloValue - a.eloValue) || [];
 
 <template>
   <main class="flex justify-center items-center w-full">
-    <div class="max-w-300 w-full bg-white/5 rounded-sm shadow p-2">
+    <div class="max-w-300 w-full bg-white/5 rounded-sm shadow">
       <UTable :data="accounts" :columns="columns" class="flex-1" :ui="{ td: 'p-2 text-highlighted text-base', th: 'text-center' }">
         <template #rank-cell="{ row }">
           <div class="flex items-center justify-center font-semibold">
