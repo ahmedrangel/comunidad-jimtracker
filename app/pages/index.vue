@@ -43,7 +43,7 @@ const meta: TableMeta<any> = {
   class: {
     tr: (row: Row<any>) => {
       if (row.original.user.twitchId === user.value?.twitchId) {
-        return "bg-green-200/10";
+        return "bg-green-300/7";
       }
       if (row.original.user.twitchId === SITE.twitchId) {
         return "bg-white/7";
