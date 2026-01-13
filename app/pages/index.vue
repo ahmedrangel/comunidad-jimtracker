@@ -163,6 +163,8 @@ const preferences = ref({
   region: "ALL"
 });
 
+const searchTerm = ref("");
+
 watch(preferences, () => {
   if (preferences.value.hideUnrankeds) {
     localStorage.setItem("pref-hide-unrankeds", "true");
@@ -175,14 +177,7 @@ watch(preferences, () => {
   }
 }, { deep: true });
 
-onMounted(() => {
-  const hideUnrankeds = localStorage.getItem("pref-hide-unrankeds");
-  preferences.value.hideUnrankeds = hideUnrankeds === "true";
-  const region = localStorage.getItem("pref-region");
-  if (region) {
-    preferences.value.region = region;
-  }
-});
+const noSpaced = (str?: string | null) => str?.replace(/\s+/g, "")?.toLowerCase() || "";
 
 const computedAccounts = computed(() => {
   return accounts.value.filter((account) => {
@@ -192,15 +187,34 @@ const computedAccounts = computed(() => {
     if (preferences.value.region !== "ALL" && account.region !== preferences.value.region) {
       return false;
     }
+    if (searchTerm.value) {
+      const search = noSpaced(searchTerm.value);
+      const gameNameMatch = noSpaced(account.gameName).includes(search);
+      const tagLineMatch = noSpaced(account.tagLine).includes(search);
+      const nameTagMatch = noSpaced(`${account.gameName}#${account.tagLine}`).includes(search);
+      const twitchDisplayMatch = noSpaced(account.user?.twitchDisplay).includes(search);
+      const twitchLoginMatch = noSpaced(account.user?.twitchLogin).includes(search);
+      return gameNameMatch || tagLineMatch || nameTagMatch || twitchDisplayMatch || twitchLoginMatch;
+    }
     return true;
   });
+});
+
+onMounted(() => {
+  const hideUnrankeds = localStorage.getItem("pref-hide-unrankeds");
+  preferences.value.hideUnrankeds = hideUnrankeds === "true";
+  const region = localStorage.getItem("pref-region");
+  if (region) {
+    preferences.value.region = region;
+  }
 });
 </script>
 
 <template>
   <main class="flex justify-center items-center w-full">
     <div class="max-w-300 w-full">
-      <div class="flex justify-end">
+      <div class="flex justify-between items-center">
+        <UInput v-model="searchTerm" placeholder="Filtro rápido..." class="mb-4" />
         <UCheckbox v-model="preferences.hideUnrankeds" label="Ocultar unrankeds" class="mb-4" />
       </div>
       <div class="rounded-sm shadow bg-white/5">
