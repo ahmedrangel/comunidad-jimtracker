@@ -121,6 +121,28 @@ const columns: TableColumn<any>[] = [
     }
   },
   {
+    accessorKey: "matches",
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      return h(UButton, {
+        color: "neutral",
+        variant: "ghost",
+        label: "Partidas",
+        icon: setSortIcon(isSorted),
+        onClick: () => {
+          const sort = column.getIsSorted();
+          column.toggleSorting(sort === "asc");
+          if (sort === "asc") {
+            accounts.value = data.value?.toSorted((a, b) => (b.wins || 0) + (b.losses || 0) - ((a.wins || 0) + (a.losses || 0))) || [];
+          }
+          else {
+            accounts.value = data.value?.toSorted((a, b) => (a.wins || 0) + (a.losses || 0) - ((b.wins || 0) + (b.losses || 0))) || [];
+          }
+        }
+      });
+    }
+  },
+  {
     accessorKey: "winRate",
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
@@ -256,6 +278,11 @@ onMounted(() => {
             <div class="flex flex-col items-center justify-center gap-1 min-w-24">
               <span class="font-semibold"><span class="text-blue-400">{{ row.original.wins }}</span> V <span class="text-neutral-500">|</span> <span class="text-rose-400">{{ row.original.losses }}</span> D</span>
               <UProgress v-model="row.original.wins" :max="row.original.wins + row.original.losses" size="lg" class="max-w-30 w-full" :ui="{ base: 'bg-rose-400', indicator: 'bg-blue-400 rounded-none' }" />
+            </div>
+          </template>
+          <template #matches-cell="{ row }">
+            <div v-if="row.original.wins || row.original.losses" class="flex items-center justify-center">
+              {{ (row.original.wins || 0) + (row.original.losses || 0) }}
             </div>
           </template>
           <template #winRate-cell="{ row }">
