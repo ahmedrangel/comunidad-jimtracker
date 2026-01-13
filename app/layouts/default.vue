@@ -26,7 +26,7 @@ watch(loggedIn, (value) => {
     </nav>
     <div class="lg:container mx-auto py-5 px-2">
       <slot />
-      <footer class="text-center text-sm text-slate-300 pt-5">
+      <footer class="flex flex-col items-center justify-center text-sm text-slate-300 pt-5 gap-4">
         <span>
           <NuxtLink href="https://github.com/ahmedrangel/comunidad-jimtracker" target="_blank" external class="text-blue-300 font-semibold hover:underline">Creado</NuxtLink>
           con ❤️ por
@@ -34,6 +34,9 @@ watch(loggedIn, (value) => {
           y
           <NuxtLink href="https://github.com/yizack" target="_blank" external class="text-yellow-300 font-semibold hover:underline">Yizack</NuxtLink>
         </span>
+        <NuxtLink href="https://github.com/ahmedrangel/comunidad-jimtracker" target="_blank" external class="hover:text-white">
+          <Icon name="simple-icons:github" class="w-8 h-8" />
+        </NuxtLink>
       </footer>
     </div>
   </div>

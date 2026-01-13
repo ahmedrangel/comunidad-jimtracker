@@ -1,6 +1,7 @@
 export default [
   "simple-icons:riotgames",
   "simple-icons:twitch",
+  "simple-icons:github",
   "lucide:chevron-down",
   "lucide:plus",
   "lucide:log-out",
