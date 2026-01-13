@@ -14,3 +14,8 @@ export const getCountryName = (emoji: string) => {
   const country = countries.find(c => c.emoji === emoji);
   return country?.name;
 };
+
+export const normalizeBidi = (str: string) => {
+  // remove bidirectional characters
+  return str.replace(/[\u200E\u200F\u202A-\u202E\u2066-\u2069]/g, "");
+};

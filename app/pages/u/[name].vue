@@ -35,6 +35,16 @@ const form = useFormState({
   iconVerificationId: getRandomIconId()
 });
 
+watch(form, () => {
+  form.value.gameName = normalizeBidi(form.value.gameName);
+  form.value.tagLine = normalizeBidi(form.value.tagLine);
+  const splitPasted = form.value.gameName.split("#");
+  const gameName = splitPasted[0]?.trim();
+  const tagLine = splitPasted[1]?.trim();
+  if (gameName) form.value.gameName = gameName;
+  if (tagLine) form.value.tagLine = tagLine;
+}, { deep: true });
+
 const addAccount = async () => {
   if (!loggedIn.value || !user.value) return;
   isLoading.value = true;
