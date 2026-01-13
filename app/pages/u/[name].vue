@@ -143,7 +143,9 @@ onUnmounted(() => {
   <main v-if="userInfo">
     <div class="flex items-center gap-2 mb-2">
       <span class="font-bold text-3xl">{{ userInfo.twitchDisplay }}</span>
-      <Twemoji v-if="userInfo.country" :emoji="userInfo.country" png size="2em" :title="getCountryName(userInfo.country)" />
+      <UTooltip v-if="userInfo.country" :text="getCountryName(userInfo.country)">
+        <Twemoji :emoji="userInfo.country" png size="2em" />
+      </UTooltip>
       <span class="ms-auto">{{ riotAccounts.length }} / {{ maxAccounts }}</span>
     </div>
     <div class="grid lg:grid-cols-5 lg:grid-rows-2 md:grid-cols-3 md:grid-rows-1 gap-4">
