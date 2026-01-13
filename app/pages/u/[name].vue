@@ -188,7 +188,7 @@ onUnmounted(() => {
             <div class="flex flex-col items-center gap-2">
               <div class="flex items-center gap-1">
                 <img :src="`/images/lol/${account.tier?.toLowerCase() || 'unranked'}.png`" class="w-12 h-12 md:w-12 md:h-12 max-w-fit" :title="account.tier || 'Unranked'">
-                <span v-if="account.division" class="font-semibold text-xl">{{ account.division }} · {{ account.lp }} LP</span>
+                <span v-if="account.division" class="font-semibold text-xl"><span v-if="account.tier && !['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(account.tier)">{{ account.division }} · </span>{{ account.lp }} LP</span>
               </div>
               <div v-if="account.wins || account.losses" class="text-sm text-neutral-400 font-semibold"><span class="text-blue-400">{{ account.wins }}</span>V · <span class="text-rose-400">{{ account.losses }}</span>D (<span class="text-white">{{ (account.wins || 0) + (account.losses || 0) }}</span>)</div>
               <span v-if="account.wins || account.losses" class="text-base font-semibold text-white">
