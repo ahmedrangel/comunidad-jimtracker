@@ -232,22 +232,6 @@ const computedAccounts = computed(() => {
   });
 });
 
-const tableTooltip = ref<{
-  reference: HTMLElement | undefined;
-  hovered: boolean;
-  value: string | null;
-}>({
-  reference: undefined,
-  hovered: false,
-  value: null
-});
-
-const onFlagHover = (event: PointerEvent, text?: string) => {
-  tableTooltip.value.reference = event.currentTarget as HTMLElement;
-  tableTooltip.value.value = text || "Desconocido";
-  tableTooltip.value.hovered = true;
-};
-
 onMounted(() => {
   const hideUnrankeds = localStorage.getItem("pref-hide-unrankeds");
   preferences.value.hideUnrankeds = hideUnrankeds === "true";
@@ -278,8 +262,7 @@ onMounted(() => {
                 <Icon name="simple-icons:riotgames" class="w-5 h-5 text-red-500" />
                 <div class="flex items-center gap-2">
                   <NuxtLink :to="`https://op.gg/es/lol/summoners/${getRegionLabel(row.original.region)}/${row.original.gameName}-${row.original.tagLine}`" target="_blank" class="font-semibold hover:underline">{{ row.original.gameName }} <span class="font-normal text-muted">#{{ row.original.tagLine }}</span></NuxtLink>
-                  <Twemoji v-if="row.original.user.country" class="max-w-fit" :emoji="row.original.user.country" png size="1.5em" @pointerenter="onFlagHover($event, getCountryName(row.original.user.country))" @pointerleave="tableTooltip.hovered = false" />
-                  <Icon name="lucide:message-square-more" size="1.3em" @pointerenter="onFlagHover($event, row.original.user.bio)" @pointerleave="tableTooltip.hovered = false" />
+                  <Twemoji v-if="row.original.user.country" :title="getCountryName(row.original.user.country)" class="max-w-fit" :emoji="row.original.user.country" png size="1.5em" />
                 </div>
               </div>
               <div class="flex items-center gap-1">
@@ -322,17 +305,6 @@ onMounted(() => {
             </div>
           </template>
         </UTable>
-        <UPopover
-          :content="{ side: 'top', updatePositionStrategy: 'always', sideOffset: 0 }"
-          :open="tableTooltip.hovered"
-          :reference="tableTooltip.reference"
-          arrow
-          :ui="{ arrow: 'fill-current', content: 'py-2 px-3 whitespace-pre' }"
-        >
-          <template #content>
-            {{ tableTooltip.value }}
-          </template>
-        </UPopover>
       </div>
     </div>
   </main>

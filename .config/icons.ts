@@ -15,6 +15,5 @@ export default [
   "lucide:check",
   "lucide:pencil",
   "lucide:menu",
-  "lucide:trash",
-  "lucide:message-square-more"
+  "lucide:trash"
 ];
