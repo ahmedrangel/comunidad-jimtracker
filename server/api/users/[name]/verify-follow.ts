@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     const { accessToken, refreshToken, expiresIn, scope } = await refreshUserToken(config.oauth.twitch.clientId, config.oauth.twitch.clientSecret, moderator.refreshToken);
     const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
     const twitch = new ApiClient({ authProvider: provider });
-    const isFollowing = await twitch.channels.getChannelFollowers(SITE.twitchId, twitchId).then(() => true).catch(() => false);
+    const isFollowing = await twitch.channels.getChannelFollowers(SITE.twitchId, twitchId).then(({ data }) => data[0].userId === twitchId).catch(() => false);
     if (refreshToken && expiresIn) {
       await db.update(tables.channelModerators).set({
         accessToken,
