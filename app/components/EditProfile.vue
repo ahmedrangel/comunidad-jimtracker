@@ -77,7 +77,7 @@ const deleteAccount = async () => {
     -->
     <UFormField help="Escribe un mensaje que se mostrará públicamente en la tabla de la comunidad y en tu perfil.">
       <UTextarea
-        v-model="form.bio"
+        v-model.trim="form.bio"
         class="w-full"
         placeholder="Escribe algo..."
         icon="lucide:message-square-more"
