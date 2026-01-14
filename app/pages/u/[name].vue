@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { name } = useRoute("u-name").params;
+const { error } = useRoute("u-name").query;
 
 const { data: userInfo } = await useFetch(`/api/users/${name}`, {
   key: `user:${name}`,
@@ -22,9 +23,6 @@ const { data: riotAccounts } = await useFetch(`/api/users/${name}/riot-accounts`
 });
 
 const toast = useToast();
-
-const isModalOpen = ref(false);
-const isLoading = ref(false);
 const isUpdating = ref(false);
 const maxAccounts = 4;
 
@@ -44,37 +42,6 @@ watch(form, () => {
   if (gameName) form.value.gameName = gameName;
   if (tagLine) form.value.tagLine = tagLine;
 }, { deep: true });
-
-const addAccount = async () => {
-  if (!loggedIn.value || !user.value) return;
-  isLoading.value = true;
-  $fetch(`/api/users/${name}/riot-accounts`, {
-    method: "POST",
-    body: {
-      gameName: form.value.gameName,
-      tagLine: form.value.tagLine,
-      region: form.value.region,
-      iconVerificationId: form.value.iconVerificationId
-    }
-  }).then((response) => {
-    riotAccounts.value.push(response);
-    isModalOpen.value = false;
-    form.reset();
-    toast.add({
-      title: "Éxito",
-      description: "Cuenta de Riot agregada correctamente.",
-      color: "success"
-    });
-  }).catch((err) => {
-    toast.add({
-      title: "Error",
-      description: err.data?.message || "Ocurrió un error al agregar la cuenta de Riot.",
-      color: "error"
-    });
-  }).finally(() => {
-    isLoading.value = false;
-  });
-};
 
 const removeAccount = async (puuid: string) => {
   if (!loggedIn.value || !user.value) return;
@@ -132,6 +99,16 @@ onMounted(() => {
 
   if (canUpdate.value && !isUpdating.value) {
     updateProfile();
+  }
+
+  if (error) {
+    toast.add({
+      title: "Error",
+      description: getErrorMessage(String(error)),
+      color: "error"
+    });
+    // Remove error query from URL
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
 });
 onUnmounted(() => {
@@ -204,39 +181,10 @@ onUnmounted(() => {
           </div>
         </template>
         <div v-if="isOwner && riotAccounts.length < maxAccounts" class="relative overflow-hidden rounded-sm border border-dashed border-accented flex items-center justify-center h-full">
-          <UModal v-model:open="isModalOpen" title="Agregar Riot Account">
-            <template #body>
-              <UForm @submit.prevent="addAccount">
-                <div class="flex flex-col gap-4">
-                  <UFieldGroup class="w-full">
-                    <UInput v-model.trim="form.gameName" label="gameName" placeholder="Nombre" :ui="{ root: 'w-full' }" required />
-                    <UBadge color="neutral" variant="outline" label="#" />
-                    <UInput v-model.trim="form.tagLine" label="tagLine" placeholder="Tag" :ui="{ root: 'w-full' }" required />
-                  </UFieldGroup>
-                  <USelect
-                    v-model="form.region"
-                    label="region"
-                    class="w-full"
-                    placeholder="Región"
-                    :items="regionMap"
-                    required
-                  />
-                  <span class="text-sm text-white">
-                    Para verificar la propiedad de la cuenta, por favor coloca el siguiente icono temporalmente en el cliente de LoL, y luego haz clic en "Agregar".
-                  </span>
-                  <img :src="getIconURL(form.iconVerificationId)" alt="Icono de Verificación" class="w-20 h-20 rounded-full border border-white/10 shadow-lg shadow-black/20 mx-auto">
-                  <div class="flex justify-end gap-2">
-                    <UButton type="submit" label="Agregar" variant="subtle" :loading="isLoading" />
-                    <UButton label="Cancelar" color="neutral" variant="subtle" @click="isModalOpen = false" />
-                  </div>
-                </div>
-              </UForm>
-            </template>
-            <UButton variant="soft" class="w-full h-full flex flex-col items-center justify-center opacity-75 p-4" @click="isModalOpen = true">
-              <span>Agregar Riot Account</span>
-              <Icon name="lucide:plus" class="w-8 h-8" />
-            </UButton>
-          </UModal>
+          <UButton variant="soft" class="w-full h-full flex flex-col items-center justify-center opacity-75 p-4" :to="('/auth/riot')" external>
+            <span>Agregar Riot Account</span>
+            <Icon name="lucide:plus" class="w-8 h-8" />
+          </UButton>
         </div>
       </div>
     </div>

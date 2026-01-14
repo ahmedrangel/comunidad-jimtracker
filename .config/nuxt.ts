@@ -68,7 +68,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     riot: {
-      apiKey: ""
+      apiKey: "",
+      clientId: "",
+      clientSecret: ""
     }
   },
 
