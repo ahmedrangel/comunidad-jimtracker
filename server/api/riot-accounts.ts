@@ -17,6 +17,7 @@ export default defineEventHandler(async () => {
     twitchLogin: tables.users.twitchLogin,
     twitchDisplay: tables.users.twitchDisplay,
     twitchProfileImage: tables.users.twitchProfileImage,
+    bio: tables.users.bio,
     country: tables.users.country
   })
     .from(tables.riotAccounts)
@@ -24,12 +25,12 @@ export default defineEventHandler(async () => {
     .all();
 
   return riotAccountsWithUsers.map((account) => {
-    const { twitchId, twitchLogin, twitchDisplay, twitchProfileImage, country, ...riotData } = account;
+    const { twitchId, twitchLogin, twitchDisplay, twitchProfileImage, bio, country, ...riotData } = account;
 
     return {
       ...riotData,
       eloValue: eloToValue(riotData.tier || "", riotData.division || "", riotData.lp || 0),
-      user: { twitchId, twitchLogin, twitchDisplay, twitchProfileImage, country }
+      user: { twitchId, twitchLogin, twitchDisplay, twitchProfileImage, bio, country }
     };
   }).sort((a, b) => a.gameName.localeCompare(b.gameName)).sort((a, b) => b.eloValue - a.eloValue).map((data, index) => ({
     rank: index + 1,
