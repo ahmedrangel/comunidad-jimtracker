@@ -88,7 +88,7 @@ const updateProfile = async () => {
   });
 };
 
-const updateCooldown = import.meta.dev ? 10 : 180; // segundos
+const updateCooldown = import.meta.dev ? 10 : 300; // segundos (5 minutos)
 const now = ref(Date.now());
 let intervalId: number | undefined;
 
