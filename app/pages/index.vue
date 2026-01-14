@@ -291,9 +291,7 @@ onMounted(() => {
             </div>
           </template>
           <template #region-cell="{ row }">
-            <div class="flex items-center justify-center">
-              <UBadge :label="getRegionLabel(row.original.region)" size="lg" variant="outline" :ui="{ base: 'bg-default ring-0' }" :style="{ color: getRegionColor(row.original.region), border: `1px solid ${getRegionColor(row.original.region)}` }" />
-            </div>
+            <RegionBadge :region="row.original.region" size="lg" />
           </template>
           <template #elo-cell="{ row }">
             <div class="flex items-center justify-center gap-1">

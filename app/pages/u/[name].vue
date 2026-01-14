@@ -170,7 +170,7 @@ onUnmounted(() => {
               <img v-if="account.profileIcon !== null" :src="getIconURL(account.profileIcon)" class="w-10 h-10 rounded-full border border-default shadow-lg shadow-black/20" :alt="`Icono de perfil de ${account.gameName}`">
               <span class="font-semibold">{{ account.gameName }}</span>
               <span class="text-muted">#{{ account.tagLine }}</span>
-              <span class="text-xs bg-neutral-950 border border-default px-2 py-1">{{ getRegionLabel(account.region) }}</span>
+              <RegionBadge :region="account.region" size="md" />
             </div>
             <div v-if="isOwner" class="absolute top-2 right-2 text-xs text-white rounded">
               <div class="flex items-center gap-1">
