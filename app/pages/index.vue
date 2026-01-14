@@ -243,7 +243,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="flex justify-center items-center w-full">
+  <main class="flex justify-center items-center">
     <div class="max-w-300 w-full">
       <div class="flex justify-between items-center gap-2">
         <UInput v-model="searchTerm" placeholder="Escribe para filtrar..." class="mb-4" trailing-icon="lucide:search" />

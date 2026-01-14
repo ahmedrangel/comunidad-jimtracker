@@ -1,7 +1,7 @@
 <template>
   <div id="layout" class="flex flex-col min-h-screen">
     <SiteNavbar />
-    <div class="lg:container mx-auto py-5 px-2 grow">
+    <div class="lg:container mx-auto py-5 px-2 grow max-w-screen">
       <slot />
     </div>
     <footer class="flex flex-col items-center justify-center text-sm text-toned py-5 gap-4 border-t border-default">
