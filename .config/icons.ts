@@ -12,5 +12,6 @@ export default [
   "lucide:refresh-cw",
   "lucide:loader-circle",
   "lucide:search",
+  "lucide:check",
   "lucide:pencil"
 ];
