@@ -131,8 +131,8 @@ onUnmounted(() => {
         <div v-if="userInfo.badges" class="flex items-center gap-2 text-lg">
           <!-- TODO: Badges -->
         </div>
-        <div v-if="userInfo.bio" class="p-3 pt-9 rounded-sm border border-accented whitespace-pre-wrap relative overflow-hidden border-s-elevated border-s-3">
-          <div class="bg-elevated absolute top-0 start-0 w-[50%] px-2 py-1 rounded-b-3xl rounded-bl-none flex items-center gap-2">
+        <div v-if="userInfo.bio" class="p-3 pt-9 rounded-sm border border-accented whitespace-pre-wrap relative border-s-elevated border-s-3">
+          <div class="bg-elevated absolute top-0 start-0 w-[70%] xl:w-[50%] px-2 py-1 rounded-b-3xl rounded-bl-none flex items-center gap-2">
             <Icon name="lucide:message-square-more" />
             <span class="font-semibold uppercase text-xs">Mensaje</span>
           </div>
