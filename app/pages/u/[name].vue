@@ -124,7 +124,10 @@ onUnmounted(() => {
       <UTooltip v-if="userInfo.country" :text="getCountryName(userInfo.country)">
         <Twemoji :emoji="userInfo.country" png size="2em" />
       </UTooltip>
-      <span class="ms-auto">{{ riotAccounts.length }} / {{ maxAccounts }}</span>
+      <div class="ms-auto flex items-center gap-2">
+        <Icon name="simple-icons:riotgames" class="text-red-500" />
+        <span class="ms-auto">{{ riotAccounts.length }} / {{ maxAccounts }}</span>
+      </div>
     </div>
     <div class="grid lg:grid-cols-5 lg:grid-rows-2 md:grid-cols-3 md:grid-rows-1 gap-4">
       <div class="row-span-2 flex flex-col gap-1">
@@ -132,7 +135,7 @@ onUnmounted(() => {
         <div v-if="userInfo.badges" class="flex items-center gap-2 text-lg">
           <!-- TODO: Badges -->
         </div>
-        <div v-if="userInfo.bio" class="p-3 rounded-sm border border-white/10">
+        <div v-if="userInfo.bio" class="p-3 rounded-sm border border-accented">
           {{ userInfo.bio }}
         </div>
         <UModal v-if="isOwner" title="Editar Perfil">
@@ -149,21 +152,21 @@ onUnmounted(() => {
       </div>
       <div class="lg:col-span-4 md:col-span-2 grid lg:grid-cols-2 gap-4">
         <template v-if="riotAccounts.length">
-          <div v-for="account in riotAccounts" :key="account.puuid" class="relative overflow-hidden rounded-sm border border-accented p-4 flex flex-col justify-center gap-2 bg-black/20">
+          <div v-for="account in riotAccounts" :key="account.puuid" class="relative overflow-hidden rounded-md border-2 border-accented p-4 flex flex-col justify-center gap-2 bg-black/20">
             <div class="flex items-center justify-center gap-2 text-xl">
-              <img v-if="account.profileIcon !== null" :src="getIconURL(account.profileIcon)" class="w-10 h-10 rounded-full border border-white/10 shadow-lg shadow-black/20" :alt="`Icono de perfil de ${account.gameName}`">
+              <img v-if="account.profileIcon !== null" :src="getIconURL(account.profileIcon)" class="w-10 h-10 rounded-full border border-default shadow-lg shadow-black/20" :alt="`Icono de perfil de ${account.gameName}`">
               <span class="font-semibold">{{ account.gameName }}</span>
-              <span class="text-neutral-400">#{{ account.tagLine }}</span>
-              <span class="text-xs bg-black/50 border border-white/10 px-2 py-1">{{ getRegionLabel(account.region) }}</span>
+              <span class="text-muted">#{{ account.tagLine }}</span>
+              <span class="text-xs bg-neutral-950 border border-default px-2 py-1">{{ getRegionLabel(account.region) }}</span>
             </div>
             <div v-if="isOwner" class="absolute top-2 right-2 text-xs text-white rounded">
               <div class="flex items-center gap-1">
                 <UDropdownMenu :items="[
                   {
                     label: 'Eliminar',
-                    onSelect() {
-                      removeAccount(account.puuid);
-                    },
+                    color: 'error',
+                    icon: 'lucide:trash',
+                    onSelect: () => removeAccount(account.puuid),
                   },
                 ]"
                 >
@@ -187,12 +190,12 @@ onUnmounted(() => {
             </div>
           </div>
         </template>
-        <div v-if="isOwner && riotAccounts.length < maxAccounts" class="relative overflow-hidden rounded-sm border border-dashed border-accented flex items-center justify-center h-full">
-          <UButton variant="soft" class="w-full h-full flex flex-col items-center justify-center opacity-75 p-4" :to="('/auth/riot')" external>
-            <span>Agregar Riot Account</span>
+        <UButton v-if="isOwner && riotAccounts.length < maxAccounts" variant="soft" class="light:bg-default dark:bg-muted border-2 border-dashed border-accented p-6 flex flex-col items-center justify-center text-center h-full hover:border-primary transition-colors group" :to="('/auth/riot')" external>
+          <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4 group-hover:scale-[1.1] transition-transform">
             <Icon name="lucide:plus" class="w-8 h-8" />
-          </UButton>
-        </div>
+          </div>
+          <span class="font-medium">Agregar Riot Account</span>
+        </UButton>
       </div>
     </div>
   </main>

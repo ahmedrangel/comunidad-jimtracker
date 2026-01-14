@@ -249,7 +249,7 @@ onMounted(() => {
         <UInput v-model="searchTerm" placeholder="Escribe para filtrar..." class="mb-4" trailing-icon="lucide:search" />
         <UCheckbox v-model="preferences.hideUnrankeds" label="Ocultar unrankeds" class="mb-4" />
       </div>
-      <div class="rounded-sm shadow bg-white/5">
+      <div class="rounded-sm shadow bg-elevated/50">
         <UTable :data="computedAccounts" :columns="columns" :meta="meta" class="flex-1" :ui="{ td: 'p-2 text-highlighted text-base', th: 'text-center' }">
           <template #rank-cell="{ row }">
             <div class="flex items-center justify-center font-semibold">
@@ -261,7 +261,7 @@ onMounted(() => {
               <div class="flex items-center gap-1">
                 <Icon name="simple-icons:riotgames" class="w-5 h-5 text-red-500" />
                 <div class="flex items-center gap-2">
-                  <NuxtLink :to="`https://op.gg/es/lol/summoners/${getRegionLabel(row.original.region)}/${row.original.gameName}-${row.original.tagLine}`" target="_blank" class="font-semibold hover:underline">{{ row.original.gameName }} <span class="font-normal text-neutral-400">#{{ row.original.tagLine }}</span></NuxtLink>
+                  <NuxtLink :to="`https://op.gg/es/lol/summoners/${getRegionLabel(row.original.region)}/${row.original.gameName}-${row.original.tagLine}`" target="_blank" class="font-semibold hover:underline">{{ row.original.gameName }} <span class="font-normal text-muted">#{{ row.original.tagLine }}</span></NuxtLink>
                   <UTooltip v-if="row.original.user.country" :text="getCountryName(row.original.user.country)">
                     <Twemoji class="max-w-fit" :emoji="row.original.user.country" png size="1.5em" />
                   </UTooltip>
@@ -270,7 +270,7 @@ onMounted(() => {
               <div class="flex items-center gap-1">
                 <img v-if="row.original.user.twitchProfileImage" :src="row.original.user.twitchProfileImage" class="w-5 h-5 rounded-sm" :alt="row.original.user.twitchDisplay">
                 <NuxtLink :to="`/u/${row.original.user.twitchLogin}`" class="hover:underline">
-                  <span class="text-xs text-neutral-400 font-semibold">{{ row.original.user.twitchDisplay }}</span>
+                  <span class="text-xs text-muted font-semibold">{{ row.original.user.twitchDisplay }}</span>
                 </NuxtLink>
               </div>
             </div>
@@ -288,7 +288,7 @@ onMounted(() => {
           </template>
           <template #wins-losses-cell="{ row }">
             <div class="flex flex-col items-center justify-center gap-1 min-w-24">
-              <span class="font-semibold"><span class="text-blue-400">{{ row.original.wins }}</span> V <span class="text-neutral-500">|</span> <span class="text-rose-400">{{ row.original.losses }}</span> D</span>
+              <span class="font-semibold"><span class="text-blue-400">{{ row.original.wins }}</span> V <span class="text-dimmed">|</span> <span class="text-rose-400">{{ row.original.losses }}</span> D</span>
               <UProgress v-model="row.original.wins" :max="row.original.wins + row.original.losses" size="lg" class="max-w-30 w-full" :ui="{ base: 'bg-rose-400', indicator: 'bg-blue-400 rounded-none' }" />
             </div>
           </template>

@@ -13,5 +13,7 @@ export default [
   "lucide:loader-circle",
   "lucide:search",
   "lucide:check",
-  "lucide:pencil"
+  "lucide:pencil",
+  "lucide:menu",
+  "lucide:trash"
 ];
