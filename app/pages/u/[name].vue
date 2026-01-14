@@ -118,16 +118,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main v-if="userInfo">
-    <div class="flex items-center gap-2 mb-2">
+  <main v-if="userInfo" class="relative">
+    <div class="flex items-center md:justify-start justify-center gap-2 mb-2">
       <span class="font-bold text-3xl">{{ userInfo.twitchDisplay }}</span>
       <UTooltip v-if="userInfo.country" :text="getCountryName(userInfo.country)">
         <Twemoji :emoji="userInfo.country" png size="2em" />
       </UTooltip>
-      <div class="ms-auto flex items-center gap-2">
-        <Icon name="simple-icons:riotgames" class="text-red-500" />
-        <span class="ms-auto">{{ riotAccounts.length }} / {{ maxAccounts }}</span>
-      </div>
     </div>
     <div class="grid lg:grid-cols-5 lg:grid-rows-2 md:grid-cols-3 md:grid-rows-1 gap-4">
       <div class="row-span-2 flex flex-col gap-1">
@@ -150,10 +146,14 @@ onUnmounted(() => {
           <span v-else>Disponible en <ClientOnly>{{ secondsToAvailable }}s</ClientOnly></span>
         </UButton>
       </div>
+      <div class="flex items-center gap-2 md:absolute top-2 end-0 justify-end">
+        <Icon name="simple-icons:riotgames" class="text-red-500" />
+        <span>{{ riotAccounts.length }} / {{ maxAccounts }}</span>
+      </div>
       <div class="lg:col-span-4 md:col-span-2 grid lg:grid-cols-2 gap-4">
         <template v-if="riotAccounts.length">
-          <div v-for="account in riotAccounts" :key="account.puuid" class="relative overflow-hidden rounded-md border-2 border-accented p-4 flex flex-col justify-center gap-2 bg-black/20">
-            <div class="flex items-center justify-center gap-2 text-xl">
+          <div v-for="account in riotAccounts" :key="account.puuid" class="relative rounded-md border-2 border-accented p-4 flex flex-col justify-center gap-2 bg-black/20">
+            <div class="flex items-center justify-center gap-2 text-xl flex-wrap">
               <img v-if="account.profileIcon !== null" :src="getIconURL(account.profileIcon)" class="w-10 h-10 rounded-full border border-default shadow-lg shadow-black/20" :alt="`Icono de perfil de ${account.gameName}`">
               <span class="font-semibold">{{ account.gameName }}</span>
               <span class="text-muted">#{{ account.tagLine }}</span>

@@ -1,10 +1,10 @@
 <template>
-  <div id="layout" class="flex flex-col min-h-screen">
+  <div id="layout" class="flex flex-col min-h-screen items-center">
     <SiteNavbar />
-    <div class="lg:container mx-auto py-5 px-2 grow max-w-screen">
+    <div class="lg:container py-5 px-2 grow max-w-screen w-full">
       <slot />
     </div>
-    <footer class="flex flex-col items-center justify-center text-sm text-toned py-5 gap-4 border-t border-default">
+    <footer class="flex flex-col items-center justify-center text-sm text-toned py-5 gap-4 border-t border-default w-full">
       <span>
         <NuxtLink href="https://github.com/ahmedrangel/comunidad-jimtracker" target="_blank" class="text-blue-300 font-semibold hover:underline">Creado</NuxtLink>
         con ❤️ por
