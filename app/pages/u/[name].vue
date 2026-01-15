@@ -131,7 +131,9 @@ onUnmounted(() => {
     <div class="flex items-center md:justify-start justify-center gap-2 mb-2">
       <span class="font-bold text-3xl">{{ userInfo.twitchDisplay }}</span>
       <UPopover v-if="userInfo.country" :ui="{ arrow: 'fill-current', content: 'py-2 px-3' }" mode="hover" arrow>
-        <Twemoji :emoji="userInfo.country" png size="2em" :alt="getCountryName(userInfo.country)" />
+        <UButton variant="link" class="p-0">
+          <Twemoji :emoji="userInfo.country" png size="2rem" :alt="getCountryName(userInfo.country)" />
+        </UButton>
         <template #content>
           {{ getCountryName(userInfo.country) }}
         </template>
@@ -193,11 +195,13 @@ onUnmounted(() => {
             <div class="flex flex-col items-center gap-2">
               <div class="flex items-center gap-1">
                 <UPopover :ui="{ arrow: 'fill-current', content: 'py-2 px-3' }" mode="hover" arrow>
-                  <img
-                    :src="`/images/lol/${account.tier?.toLowerCase() || 'unranked'}.png`"
-                    class="w-12 h-12 md:w-12 md:h-12 max-w-fit"
-                    :alt="account.tier || 'UNRANKED'"
-                  >
+                  <UButton variant="link" class="p-0">
+                    <img
+                      :src="`/images/lol/${account.tier?.toLowerCase() || 'unranked'}.png`"
+                      class="w-12 h-12 md:w-12 md:h-12 max-w-fit"
+                      :alt="account.tier || 'UNRANKED'"
+                    >
+                  </UButton>
                   <template #content>
                     {{ account.tier || 'UNRANKED' }}
                   </template>
