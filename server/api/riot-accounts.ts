@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 export default defineEventHandler(async () => {
   const riotAccountsWithUsers = await db.select({
     // Campos de riot accounts
+    puuid: tables.riotAccounts.puuid,
     twitchId: tables.riotAccounts.twitchId,
     gameName: tables.riotAccounts.gameName,
     tagLine: tables.riotAccounts.tagLine,
@@ -13,6 +14,8 @@ export default defineEventHandler(async () => {
     lp: tables.riotAccounts.lp,
     wins: tables.riotAccounts.wins,
     losses: tables.riotAccounts.losses,
+    role1: tables.riotAccounts.role1,
+    role2: tables.riotAccounts.role2,
     // Campos de usuario
     twitchLogin: tables.users.twitchLogin,
     twitchDisplay: tables.users.twitchDisplay,

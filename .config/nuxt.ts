@@ -141,7 +141,10 @@ export default defineNuxtConfig({
   icon: {
     mode: "svg",
     provider: "none",
-    clientBundle: { icons }
+    clientBundle: { icons },
+    customCollections: [
+      { prefix: "lol", dir: "./app/assets/icons/lol" }
+    ]
   },
 
   sitemap: {

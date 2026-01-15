@@ -217,6 +217,9 @@ onUnmounted(() => {
                 }}
               </span>
             </div>
+            <div class="mt-2">
+              <RoleSelector :data="{ ...account, user: userInfo }" />
+            </div>
           </div>
         </template>
         <UButton v-if="isOwner && riotAccounts.length < maxAccounts" variant="soft" class="light:bg-default dark:bg-muted border-2 border-dashed border-accented p-6 flex flex-col items-center justify-center text-center h-full hover:border-primary transition-colors group" @click="addRiotAccount">

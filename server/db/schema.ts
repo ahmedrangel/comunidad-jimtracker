@@ -30,6 +30,8 @@ export const riotAccounts = sqliteTable("riot_accounts", {
   losses: integer(),
   profileIcon: integer(),
   verified: integer({ mode: "boolean" }).notNull().default(false),
+  role1: text(),
+  role2: text(),
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
   updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))
 });

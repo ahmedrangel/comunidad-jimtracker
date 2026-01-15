@@ -104,6 +104,10 @@ const columns: TableColumn<any>[] = [
     }
   },
   {
+    accessorKey: "roles",
+    header: "Roles"
+  },
+  {
     accessorKey: "wins-losses",
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
@@ -322,6 +326,9 @@ onMounted(() => {
               </UPopover>
               <span v-if="row.original.division || row.original.lp"><span v-if="!['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(row.original.tier)">{{ row.original.division }} · </span>{{ row.original.lp }} LP</span>
             </div>
+          </template>
+          <template #roles-cell="{ row }">
+            <RoleSelector :data="row.original" />
           </template>
           <template #wins-losses-cell="{ row }">
             <div class="flex flex-col items-center justify-center gap-1 min-w-24">
