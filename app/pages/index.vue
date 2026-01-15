@@ -261,7 +261,7 @@ onMounted(() => {
   <main class="flex justify-center items-center">
     <div class="max-w-300 w-full">
       <div class="flex justify-between items-center gap-2">
-        <UInput v-model="searchTerm" placeholder="Escribe para filtrar..." class="mb-4" trailing-icon="lucide:search" />
+        <UInput v-model="searchTerm" placeholder="Escribe para filtrar..." class="mb-4" trailing-icon="lucide:search" type="search" />
         <UCheckbox v-model="preferences.hideUnrankeds" label="Ocultar unrankeds" class="mb-4" />
       </div>
       <div class="rounded-sm shadow bg-elevated/50">
