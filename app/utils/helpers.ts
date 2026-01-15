@@ -23,3 +23,5 @@ const errorMap: Record<string, string> = {
 export const getErrorMessage = (code: string): string => {
   return errorMap[code] || "Ocurrió un error desconocido.";
 };
+
+export const roles = ["top", "jungle", "mid", "adc", "support"];

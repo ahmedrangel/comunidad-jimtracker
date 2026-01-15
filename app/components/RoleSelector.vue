@@ -4,7 +4,6 @@ const props = defineProps<{
 }>();
 
 const { user } = useUserSession();
-const roles = ["top", "jungle", "mid", "adc", "support"];
 
 const modalRole1 = ref(false);
 const modalRole2 = ref(false);
@@ -16,7 +15,8 @@ const isOwner = computed(() => {
   return user?.value?.twitchId === props.data.user.twitchId;
 });
 
-const selectRole = async (role: string | null, slot: 1 | 2) => {
+const selectRole = async (event: { role: string | null, slot: 1 | 2 }) => {
+  const { role, slot } = event;
   if ((slot === 1 && role === selectedRole1.value) || (slot === 2 && role === selectedRole2.value)) {
     modalRole1.value = false;
     modalRole2.value = false;
@@ -65,17 +65,7 @@ const selectRole = async (role: string | null, slot: 1 | 2) => {
         </span>
       </div>
       <template #content>
-        <div class="flex flex-wrap justify-center items-center max-w-36 gap-1 p-1">
-          <UButton v-for="role in roles" :key="role" variant="ghost" color="neutral" class="flex flex-col items-center justify-center gap-1 p-1" @click="selectRole(role, 1)">
-            <Icon :name="`lol:${role}`" class="w-7 h-7" />
-          </UButton>
-          <UButton variant="ghost" color="neutral" class="flex flex-col items-center justify-center gap-1 p-1" @click="selectRole('fill', 1)">
-            <Icon name="lol:fill" class="w-7 h-7" />
-          </UButton>
-          <UButton variant="ghost" color="neutral" class="flex flex-col items-center justify-center gap-1 p-1" @click="selectRole(null, 1)">
-            <Icon name="lucide:x" class="w-7 h-7 text-red-300" />
-          </UButton>
-        </div>
+        <RoleMenu :selected-slot="1" :selected-role="selectedRole1" @update:role="selectRole" />
       </template>
     </UPopover>
     <UPopover v-if="selectedRole1 !== 'fill' && (selectedRole2 || isOwner)" v-model:open="modalRole2" arrow>
@@ -88,17 +78,7 @@ const selectRole = async (role: string | null, slot: 1 | 2) => {
         </span>
       </div>
       <template #content>
-        <div class="flex flex-wrap justify-center items-center max-w-36 gap-1 p-1">
-          <UButton v-for="role in roles" :key="role" variant="ghost" color="neutral" class="flex flex-col items-center justify-center gap-1 p-1" @click="selectRole(role, 2)">
-            <Icon :name="`lol:${role}`" class="w-7 h-7" />
-          </UButton>
-          <UButton variant="ghost" color="neutral" class="flex flex-col items-center justify-center gap-1 p-1" @click="selectRole('fill', 2)">
-            <Icon name="lol:fill" class="w-7 h-7" />
-          </UButton>
-          <UButton variant="ghost" color="neutral" class="flex flex-col items-center justify-center gap-1 p-1" @click="selectRole(null, 2)">
-            <Icon name="lucide:x" class="w-7 h-7 text-red-300" />
-          </UButton>
-        </div>
+        <RoleMenu :selected-slot="2" :selected-role="selectedRole2" @update:role="selectRole" />
       </template>
     </UPopover>
   </div>
