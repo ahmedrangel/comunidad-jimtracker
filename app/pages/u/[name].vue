@@ -130,8 +130,11 @@ onUnmounted(() => {
   <main v-if="userInfo" class="relative">
     <div class="flex items-center md:justify-start justify-center gap-2 mb-2">
       <span class="font-bold text-3xl">{{ userInfo.twitchDisplay }}</span>
-      <UPopover v-if="userInfo.country" :text="getCountryName(userInfo.country)" :ui="{ arrow: 'fill-current' }" arrow>
-        <Twemoji :emoji="userInfo.country" png size="2em" />
+      <UPopover v-if="userInfo.country" :ui="{ arrow: 'fill-current', content: 'py-2 px-3' }" mode="hover" arrow>
+        <Twemoji :emoji="userInfo.country" png size="2em" :alt="getCountryName(userInfo.country)" />
+        <template #content>
+          {{ getCountryName(userInfo.country) }}
+        </template>
       </UPopover>
     </div>
     <div class="grid lg:grid-cols-5 lg:grid-rows-2 md:grid-cols-3 md:grid-rows-1 gap-4">
@@ -189,12 +192,15 @@ onUnmounted(() => {
             </div>
             <div class="flex flex-col items-center gap-2">
               <div class="flex items-center gap-1">
-                <UPopover :text="account.tier || 'UNRANKED'" :ui="{ arrow: 'fill-current' }" arrow>
+                <UPopover :ui="{ arrow: 'fill-current', content: 'py-2 px-3' }" arrow>
                   <img
                     :src="`/images/lol/${account.tier?.toLowerCase() || 'unranked'}.png`"
                     class="w-12 h-12 md:w-12 md:h-12 max-w-fit"
                     :alt="account.tier || 'UNRANKED'"
                   >
+                  <template #content>
+                    {{ account.tier || 'UNRANKED' }}
+                  </template>
                 </UPopover>
                 <span v-if="account.division" class="font-semibold text-xl"><span v-if="account.tier && !['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(account.tier)">{{ account.division }} · </span>{{ account.lp }} LP</span>
               </div>
