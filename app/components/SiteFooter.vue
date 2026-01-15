@@ -1,5 +1,5 @@
 <template>
-  <UFooter class="w-full border-t border-default">
+  <UFooter class="border-t border-default">
     <template #left>
       <p class="text-muted text-sm">{{ SITE.name }} © {{ new Date().getFullYear() }}</p>
     </template>

@@ -52,14 +52,13 @@ const pages = computed<NavigationMenuItem[]>(() => {
 <template>
   <UHeader
     title=""
-    class="w-full top-0 py-1 z-50 border-0 backdrop-blur-sm border-b border-default bg-elevated/50"
+    class="top-0 py-1 z-50 border-0 backdrop-blur-sm border-b border-default bg-elevated/50"
     :ui="{ center: 'flex' }"
     :toggle="false"
   >
     <UNavigationMenu
       :items="pages"
       color="neutral"
-      class="w-full"
       :ui="{
         list: 'gap-2',
         link: 'text-md hover:before:bg-accented/50 data-active:before:bg-accented/75',
