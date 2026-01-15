@@ -80,8 +80,6 @@ export function defineOAuthRiotGamesEventHandler ({ config, onSuccess, onError }
       apiURL: "https://auth.riotgames.com"
     }) as OAuthRiotGamesConfig;
 
-    console.info(config.clientSecret);
-
     const query = getQuery<{ code?: string, error?: string, state?: string }>(event);
 
     if (query.error) {
