@@ -254,7 +254,14 @@ onMounted(() => {
         <UCheckbox v-model="preferences.hideUnrankeds" label="Ocultar unrankeds" class="mb-4" />
       </div>
       <div class="rounded-sm shadow bg-elevated/50">
-        <UTable :data="computedAccounts" :columns="columns" :meta="meta" class="flex-1" :ui="{ td: 'p-2 text-highlighted text-base', th: 'text-center' }">
+        <UTable
+          :data="computedAccounts"
+          :columns="columns"
+          :meta="meta"
+          :get-row-id="(row) => row.puuid"
+          class="flex-1"
+          :ui="{ td: 'p-2 text-highlighted text-base', th: 'text-center' }"
+        >
           <template #rank-cell="{ row }">
             <div class="flex items-center justify-center font-semibold">
               {{ row.original.rank }}
