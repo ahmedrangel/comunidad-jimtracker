@@ -192,7 +192,7 @@ onUnmounted(() => {
             </div>
             <div class="flex flex-col items-center gap-2">
               <div class="flex items-center gap-1">
-                <UPopover :ui="{ arrow: 'fill-current', content: 'py-2 px-3' }" arrow>
+                <UPopover :ui="{ arrow: 'fill-current', content: 'py-2 px-3' }" mode="hover" arrow>
                   <img
                     :src="`/images/lol/${account.tier?.toLowerCase() || 'unranked'}.png`"
                     class="w-12 h-12 md:w-12 md:h-12 max-w-fit"
