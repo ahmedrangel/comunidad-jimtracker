@@ -379,6 +379,7 @@ onMounted(() => {
             Mostrando {{ Math.min((table?.tableApi?.getState().pagination.pageIndex || 0) * pagination.pageSize + 1, table?.tableApi?.getFilteredRowModel().rows.length || 0) }} - {{ Math.min(((table?.tableApi?.getState().pagination.pageIndex || 0) + 1) * pagination.pageSize, table?.tableApi?.getFilteredRowModel().rows.length || 0) }} de {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }}
           </div>
           <UPagination
+            v-if="table?.tableApi && table?.tableApi?.getFilteredRowModel().rows.length > pagination.pageSize"
             :page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
             :items-per-page="pagination.pageSize"
             :total="table?.tableApi?.getFilteredRowModel().rows.length || 0"
