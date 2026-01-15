@@ -20,7 +20,10 @@ export default defineEventHandler(async (event) => {
       role1: body.role1,
       role2: body.role2
     })
-    .where(eq(tables.riotAccounts.puuid, params.puuid))
+    .where(and(
+      eq(tables.riotAccounts.twitchId, user.twitchId),
+      eq(tables.riotAccounts.puuid, params.puuid)
+    ))
     .returning({
       role1: tables.riotAccounts.role1,
       role2: tables.riotAccounts.role2
