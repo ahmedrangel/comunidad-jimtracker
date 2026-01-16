@@ -62,31 +62,51 @@ const handleModalOwnerUpdate = () => {
 
 <template>
   <div class="flex items-center justify-center gap-1">
-    <UPopover v-model:open="modalRole1" arrow @update:open="handleModalOwnerUpdate">
-      <div v-if="selectedRole1 || isOwner" class="rounded-full" :class="{ 'border p-1 border-neutral-200/20 hover:bg-neutral-500/20': isOwner, 'border-neutral-200/0': !isOwner }">
+    <UPopover v-if="isOwner" v-model:open="modalRole1" arrow @update:open="handleModalOwnerUpdate">
+      <div v-if="selectedRole1 || isOwner" class="*:flex rounded-full" :class="{ 'border p-1 border-neutral-200/20 hover:bg-neutral-500/20': isOwner, 'border-neutral-200/0': !isOwner }">
         <span v-if="selectedRole1" :title="selectedRole1">
-          <Icon :name="`lol:${selectedRole1}`" class="w-6.5 h-6.5" />
+          <Icon :name="`lol:${selectedRole1}`" class="w-6.5 h-6.5" mode="css" />
         </span>
         <span v-else-if="!selectedRole1 && isOwner" title="Seleccionar rol primario">
-          <Icon name="lucide:plus" class="w-6.5 h-6.5" />
+          <Icon name="lucide:plus" class="w-6.5 h-6.5" mode="css" />
         </span>
       </div>
       <template #content>
         <RoleMenu :selected-slot="1" :selected-role="selectedRole1" @update:role="selectRole" />
       </template>
     </UPopover>
-    <UPopover v-if="selectedRole1 !== 'fill' && (selectedRole2 || isOwner)" v-model:open="modalRole2" arrow @update:open="handleModalOwnerUpdate">
-      <div class="rounded-full" :class="{ 'border p-1 border-neutral-200/20 hover:bg-neutral-500/20': isOwner, 'border-neutral-200/0': !isOwner }">
+    <div v-else>
+      <div v-if="selectedRole1 || isOwner" class="*:flex rounded-full" :class="{ 'border p-1 border-neutral-200/20 hover:bg-neutral-500/20': isOwner, 'border-neutral-200/0': !isOwner }">
+        <span v-if="selectedRole1" :title="selectedRole1">
+          <Icon :name="`lol:${selectedRole1}`" class="w-6.5 h-6.5" mode="css" />
+        </span>
+        <span v-else-if="!selectedRole1 && isOwner" title="Seleccionar rol primario">
+          <Icon name="lucide:plus" class="w-6.5 h-6.5" mode="css" />
+        </span>
+      </div>
+    </div>
+    <UPopover v-if="isOwner && selectedRole1 !== 'fill' && (selectedRole2 || isOwner)" v-model:open="modalRole2" arrow @update:open="handleModalOwnerUpdate">
+      <div class="*:flex rounded-full" :class="{ 'border p-1 border-neutral-200/20 hover:bg-neutral-500/20': isOwner, 'border-neutral-200/0': !isOwner }">
         <span v-if="selectedRole2" :title="selectedRole2">
-          <Icon :name="`lol:${selectedRole2}`" class="w-6.5 h-6.5" />
+          <Icon :name="`lol:${selectedRole2}`" class="w-6.5 h-6.5" mode="css" />
         </span>
         <span v-else-if="!selectedRole2 && isOwner" title="Seleccionar rol secundario">
-          <Icon name="lucide:plus" class="w-6.5 h-6.5" />
+          <Icon name="lucide:plus" class="w-6.5 h-6.5" mode="css" />
         </span>
       </div>
       <template #content>
         <RoleMenu :selected-slot="2" :selected-role="selectedRole2" @update:role="selectRole" />
       </template>
     </UPopover>
+    <div v-else>
+      <div v-if="selectedRole2" class="*:flex rounded-full" :class="{ 'border p-1 border-neutral-200/20 hover:bg-neutral-500/20': isOwner, 'border-neutral-200/0': !isOwner }">
+        <span v-if="selectedRole2" :title="selectedRole2">
+          <Icon :name="`lol:${selectedRole2}`" class="w-6.5 h-6.5" mode="css" />
+        </span>
+        <span v-else-if="!selectedRole2 && isOwner" title="Seleccionar rol secundario">
+          <Icon name="lucide:plus" class="w-6.5 h-6.5" mode="css" />
+        </span>
+      </div>
+    </div>
   </div>
 </template>

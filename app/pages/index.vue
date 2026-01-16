@@ -2,6 +2,7 @@
 import type { TableColumn } from "@nuxt/ui";
 import type { Row, SortDirection, TableMeta } from "@tanstack/vue-table";
 import { getPaginationRowModel } from "@tanstack/vue-table";
+import { refDebounced } from "@vueuse/core";
 
 const { data } = await useFetch("/api/riot-accounts", {
   key: "riot-accounts",
@@ -10,9 +11,17 @@ const { data } = await useFetch("/api/riot-accounts", {
 
 const { user } = useUserSession();
 
-const accounts = ref(data.value?.toSorted((a, b) => b.eloValue - a.eloValue) || []);
 const UButton = resolveComponent("UButton");
 const USelect = resolveComponent("USelect");
+
+const TableCellRank = resolveComponent("TableCellRank");
+const TableCellAccounts = resolveComponent("TableCellAccounts");
+const TableCellRegion = resolveComponent("TableCellRegion");
+const TableCellElo = resolveComponent("TableCellElo");
+const TableCellRoles = resolveComponent("TableCellRoles");
+const TableCellWinLosses = resolveComponent("TableCellWinLosses");
+const TableCellWinRate = resolveComponent("TableCellWinRate");
+const TableCellMatches = resolveComponent("TableCellMatches");
 
 const setSortIcon = (isSorted?: false | SortDirection) => {
   return isSorted ? isSorted === "asc" ? "lucide:chevron-up" : "lucide:chevron-down" : "lucide:list-chevrons-up-down";
@@ -22,6 +31,13 @@ const calculateWinRate = (wins?: number | null, losses?: number | null): number 
   const totalGames = (wins || 0) + (losses || 0);
   return totalGames === 0 ? 0 : ((wins || 0) / totalGames) * 100;
 };
+
+const noSpaced = (str?: string | null) => str?.replace(/\s+/g, "")?.toLowerCase() || "";
+
+const table = useTemplateRef("table");
+
+const searchInput = ref("");
+const debouncedSearch = refDebounced(searchInput, 300);
 
 const columns: TableColumn<any>[] = [
   {
@@ -33,14 +49,14 @@ const columns: TableColumn<any>[] = [
         variant: "ghost",
         label: "#",
         icon: setSortIcon(isSorted),
-        onClick: () => {
-          column.toggleSorting();
-        }
+        onClick: () => column.toggleSorting()
       });
-    }
+    },
+    cell: ({ row }) => h(TableCellRank, { row })
   },
   {
-    accessorKey: "account",
+    id: "account",
+    accessorKey: "gameName",
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return h(UButton, {
@@ -48,20 +64,20 @@ const columns: TableColumn<any>[] = [
         variant: "ghost",
         label: "Cuenta",
         icon: setSortIcon(isSorted),
-        onClick: () => {
-          column.toggleSorting();
-          const sort = column.getIsSorted();
-          if (sort === "asc") {
-            accounts.value = data.value?.toSorted((a, b) => a.gameName.localeCompare(b.gameName)) || [];
-          }
-          else if (sort === "desc") {
-            accounts.value = data.value?.toSorted((a, b) => b.gameName.localeCompare(a.gameName)) || [];
-          }
-          else {
-            accounts.value = data.value || [];
-          }
-        }
+        onClick: () => column.toggleSorting()
       });
+    },
+    cell: ({ row }) => h(TableCellAccounts, { row }),
+    filterFn: (row, columnId, search) => {
+      if (!search) return true;
+
+      const gameNameMatch = noSpaced(row.original.gameName).includes(search);
+      const tagLineMatch = noSpaced(row.original.tagLine).includes(search);
+      const nameTagMatch = noSpaced(`${row.original.gameName}#${row.original.tagLine}`).includes(search);
+      const twitchDisplayMatch = noSpaced(row.original.user?.twitchDisplay).includes(search);
+      const twitchLoginMatch = noSpaced(row.original.user?.twitchLogin).includes(search);
+
+      return gameNameMatch || tagLineMatch || nameTagMatch || twitchDisplayMatch || twitchLoginMatch;
     }
   },
   {
@@ -71,16 +87,26 @@ const columns: TableColumn<any>[] = [
         "modelValue": preferences.value.region,
         "onUpdate:modelValue": (value: string) => {
           preferences.value.region = value;
+          const column = table.value?.tableApi?.getColumn("region");
+          if (value === "ALL") {
+            column?.setFilterValue(undefined);
+          }
+          else {
+            column?.setFilterValue(value);
+          }
         },
         "color": "neutral",
         "variant": "subtle",
         "class": "min-w-24",
         "items": [{ label: "Región", value: "ALL" }, ...regionMap]
       });
-    }
+    },
+    cell: ({ row }) => h(TableCellRegion, { row }),
+    filterFn: "equals"
   },
   {
-    accessorKey: "elo",
+    id: "elo",
+    accessorKey: "eloValue",
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return h(UButton, {
@@ -88,28 +114,25 @@ const columns: TableColumn<any>[] = [
         variant: "ghost",
         label: "Elo",
         icon: setSortIcon(isSorted),
-        onClick: () => {
-          column.toggleSorting();
-          const sort = column.getIsSorted();
-          if (sort === "asc") {
-            accounts.value = data.value?.toSorted((a, b) => a.eloValue - b.eloValue) || [];
-          }
-          else if (sort === "desc") {
-            accounts.value = data.value?.toSorted((a, b) => b.eloValue - a.eloValue) || [];
-          }
-          else {
-            accounts.value = data.value || [];
-          }
-        }
+        onClick: () => column.toggleSorting()
       });
+    },
+    cell: ({ row }) => h(TableCellElo, { row }),
+    filterFn: (row, columnId, filterValue) => {
+      if (filterValue === true) {
+        return row.original.eloValue > 0;
+      }
+      return true;
     }
   },
   {
     accessorKey: "roles",
-    header: "Roles"
+    header: "Roles",
+    cell: ({ row }) => h(TableCellRoles, { row })
   },
   {
-    accessorKey: "wins-losses",
+    id: "wins-losses",
+    accessorFn: row => (row.wins || 0) - (row.losses || 0),
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return h(UButton, {
@@ -117,24 +140,14 @@ const columns: TableColumn<any>[] = [
         variant: "ghost",
         label: "V - D",
         icon: setSortIcon(isSorted),
-        onClick: () => {
-          column.toggleSorting();
-          const sort = column.getIsSorted();
-          if (sort === "asc") {
-            accounts.value = data.value?.toSorted((a, b) => (b.losses || 0) - (a.losses || 0))?.toSorted((a, b) => (a.wins || 0) - (b.wins || 0)) || [];
-          }
-          else if (sort === "desc") {
-            accounts.value = data.value?.toSorted((a, b) => (a.losses || 0) - (b.losses || 0))?.toSorted((a, b) => (b.wins || 0) - (a.wins || 0)) || [];
-          }
-          else {
-            accounts.value = data.value || [];
-          }
-        }
+        onClick: () => column.toggleSorting()
       });
-    }
+    },
+    cell: ({ row }) => h(TableCellWinLosses, { row })
   },
   {
-    accessorKey: "matches",
+    id: "matches",
+    accessorFn: row => (row.wins || 0) + (row.losses || 0),
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return h(UButton, {
@@ -142,24 +155,14 @@ const columns: TableColumn<any>[] = [
         variant: "ghost",
         label: "Partidas",
         icon: setSortIcon(isSorted),
-        onClick: () => {
-          column.toggleSorting();
-          const sort = column.getIsSorted();
-          if (sort === "asc") {
-            accounts.value = data.value?.toSorted((a, b) => (a.wins || 0) + (a.losses || 0) - ((b.wins || 0) + (b.losses || 0))) || [];
-          }
-          else if (sort === "desc") {
-            accounts.value = data.value?.toSorted((a, b) => (b.wins || 0) + (b.losses || 0) - ((a.wins || 0) + (a.losses || 0))) || [];
-          }
-          else {
-            accounts.value = data.value || [];
-          }
-        }
+        onClick: () => column.toggleSorting()
       });
-    }
+    },
+    cell: ({ row }) => h(TableCellMatches, { row })
   },
   {
-    accessorKey: "winRate",
+    id: "winRate",
+    accessorFn: row => calculateWinRate(row.wins, row.losses),
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return h(UButton, {
@@ -167,21 +170,10 @@ const columns: TableColumn<any>[] = [
         variant: "ghost",
         label: "Winrate",
         icon: setSortIcon(isSorted),
-        onClick: () => {
-          column.toggleSorting();
-          const sort = column.getIsSorted();
-          if (sort === "asc") {
-            accounts.value = data.value?.toSorted((a, b) => calculateWinRate(a.wins, a.losses) - calculateWinRate(b.wins, b.losses)) || [];
-          }
-          else if (sort === "desc") {
-            accounts.value = data.value?.toSorted((a, b) => calculateWinRate(b.wins, b.losses) - calculateWinRate(a.wins, a.losses)) || [];
-          }
-          else {
-            accounts.value = data.value || [];
-          }
-        }
+        onClick: () => column.toggleSorting()
       });
-    }
+    },
+    cell: ({ row }) => h(TableCellWinRate, { row })
   }
 ];
 
@@ -204,176 +196,77 @@ const preferences = ref({
   region: "ALL"
 });
 
-const searchTerm = ref("");
-
-const table = useTemplateRef("table");
-const pagination = ref({
-  pageIndex: 0,
-  pageSize: 50
-});
-
-watch(preferences, () => {
-  localStorage.setItem("pref-hide-unrankeds", String(preferences.value.hideUnrankeds));
-
-  if (preferences.value.region) {
-    // localStorage.setItem("pref-region", preferences.value.region);
+watch(() => preferences.value.hideUnrankeds, (newValue) => {
+  localStorage.setItem("pref-hide-unrankeds", String(newValue));
+  const eloColumn = table.value?.tableApi?.getColumn("elo");
+  if (eloColumn) {
+    eloColumn.setFilterValue(newValue ? true : undefined);
   }
-}, { deep: true });
-
-const noSpaced = (str?: string | null) => str?.replace(/\s+/g, "")?.toLowerCase() || "";
-
-const computedAccounts = computed(() => {
-  return accounts.value.filter((account) => {
-    if (preferences.value.hideUnrankeds && !account.tier) {
-      return false;
-    }
-    if (preferences.value.region !== "ALL" && account.region !== preferences.value.region) {
-      return false;
-    }
-    if (searchTerm.value) {
-      const search = noSpaced(searchTerm.value);
-      const gameNameMatch = noSpaced(account.gameName).includes(search);
-      const tagLineMatch = noSpaced(account.tagLine).includes(search);
-      const nameTagMatch = noSpaced(`${account.gameName}#${account.tagLine}`).includes(search);
-      const twitchDisplayMatch = noSpaced(account.user?.twitchDisplay).includes(search);
-      const twitchLoginMatch = noSpaced(account.user?.twitchLogin).includes(search);
-      return gameNameMatch || tagLineMatch || nameTagMatch || twitchDisplayMatch || twitchLoginMatch;
-    }
-    return true;
-  });
+  // reset to first page when toggling
+  table.value?.tableApi?.setPageIndex(0);
 });
 
-watch([() => preferences.value.hideUnrankeds, () => preferences.value.region, searchTerm], () => {
-  pagination.value.pageIndex = 0;
+watch(() => preferences.value.region, () => {
+  localStorage.setItem("pref-region", preferences.value.region);
+});
+
+watch(debouncedSearch, (value) => {
+  table.value?.tableApi?.getColumn("account")?.setFilterValue(noSpaced(value));
 });
 
 onMounted(() => {
   const hideUnrankeds = localStorage.getItem("pref-hide-unrankeds");
   preferences.value.hideUnrankeds = hideUnrankeds === "true";
+
   const region = localStorage.getItem("pref-region");
-  if (region) {
-    // preferences.value.region = region;
+  if (region && region !== "ALL") {
+    preferences.value.region = region;
   }
+
+  nextTick(() => {
+    if (preferences.value.hideUnrankeds) {
+      table.value?.tableApi?.getColumn("elo")?.setFilterValue(true);
+    }
+    if (preferences.value.region && preferences.value.region !== "ALL") {
+      table.value?.tableApi?.getColumn("region")?.setFilterValue(preferences.value.region);
+    }
+  });
+});
+
+const pagination = ref({
+  pageIndex: 0,
+  pageSize: 100
 });
 </script>
 
 <template>
   <main class="flex justify-center items-center">
     <div class="max-w-300 w-full">
-      <div class="flex justify-between items-center gap-2">
-        <UInput v-model="searchTerm" placeholder="Escribe para filtrar..." class="mb-4" trailing-icon="lucide:search" type="search" />
-        <UCheckbox v-model="preferences.hideUnrankeds" label="Ocultar unrankeds" class="mb-4" />
+      <div class="flex justify-between items-center gap-2 px-4 py-3.5">
+        <UInput
+          v-model="searchInput"
+          placeholder="Escribe para filtrar..."
+          class="min-w-[12ch]"
+          trailing-icon="lucide:search"
+          type="search"
+        />
+        <UCheckbox v-model="preferences.hideUnrankeds" label="Ocultar unrankeds" />
       </div>
       <div class="rounded-sm shadow bg-elevated/50">
         <UTable
           ref="table"
           v-model:pagination="pagination"
-          :data="computedAccounts"
+          :data="data"
           :columns="columns"
           :meta="meta"
           :get-row-id="(row) => row.puuid"
+          class="flex-1"
+          :ui="{ td: 'p-2 text-highlighted text-base', th: 'text-center' }"
           :pagination-options="{
             getPaginationRowModel: getPaginationRowModel(),
           }"
-          class="flex-1"
-          :ui="{ td: 'p-2 text-highlighted text-base', th: 'text-center' }"
-        >
-          <template #rank-cell="{ row }">
-            <div class="flex items-center justify-center font-semibold">
-              {{ row.original.rank }}
-            </div>
-          </template>
-          <template #account-cell="{ row }">
-            <div class="flex flex-col items-start gap-0.5">
-              <div class="flex items-center gap-1">
-                <Icon name="simple-icons:riotgames" class="w-5 h-5 text-red-500" />
-                <div class="flex items-center gap-2">
-                  <NuxtLink
-                    :to="`https://op.gg/es/lol/summoners/${getRegionLabel(row.original.region)}/${row.original.gameName}-${row.original.tagLine}`"
-                    target="_blank"
-                    class="font-semibold hover:underline"
-                  >
-                    <span>{{ row.original.gameName }} <span class="font-normal text-muted">#{{ row.original.tagLine }}</span></span>
-                  </NuxtLink>
-                  <UPopover v-if="row.original.user.country" mode="hover" :content="{ side: 'top' }" arrow>
-                    <UButton variant="link" class="p-0">
-                      <Twemoji
-                        class="max-w-fit"
-                        :emoji="row.original.user.country"
-                        png
-                        size="1.5em"
-                      />
-                    </UButton>
-                    <template #content>
-                      {{ getCountryName(row.original.user.country) }}
-                    </template>
-                  </UPopover>
-                  <UPopover v-if="row.original.user.country" mode="hover" :content="{ side: 'top' }" arrow>
-                    <UButton variant="link" class="p-0 text-default!">
-                      <Icon
-                        v-if="row.original.user.bio"
-                        name="lucide:message-square-more"
-                        size="1.3em"
-                      />
-                    </UButton>
-                    <template #content>
-                      {{ row.original.user.bio }}
-                    </template>
-                  </UPopover>
-                </div>
-              </div>
-              <div class="flex items-center gap-1">
-                <img v-if="row.original.user.twitchProfileImage" :src="row.original.user.twitchProfileImage" class="w-5 h-5 rounded-sm" :alt="row.original.user.twitchDisplay">
-                <NuxtLink :to="`/u/${row.original.user.twitchLogin}`" class="hover:underline">
-                  <span class="text-xs text-muted font-semibold">{{ row.original.user.twitchDisplay }}</span>
-                </NuxtLink>
-              </div>
-            </div>
-          </template>
-          <template #region-cell="{ row }">
-            <RegionBadge :region="row.original.region" size="lg" />
-          </template>
-          <template #elo-cell="{ row }">
-            <div class="flex items-center justify-center gap-1">
-              <UPopover v-if="row.original.user.country" mode="hover" :content="{ side: 'top' }" arrow>
-                <UButton variant="link" class="p-0 text-default!">
-                  <img
-                    :src="`/images/lol/${row.original.tier?.toLowerCase() || 'unranked'}.png`"
-                    class="w-10 h-10 md:w-10 md:h-10 max-w-fit"
-                    :alt="row.original.tier || 'UNRANKED'"
-                  >
-                </UButton>
-                <template #content>
-                  {{ row.original.tier || 'UNRANKED' }}
-                </template>
-              </UPopover>
-              <span v-if="row.original.division || row.original.lp"><span v-if="!['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(row.original.tier)">{{ row.original.division }} · </span>{{ row.original.lp }} LP</span>
-            </div>
-          </template>
-          <template #roles-cell="{ row }">
-            <RoleSelector :data="row.original" />
-          </template>
-          <template #wins-losses-cell="{ row }">
-            <div class="flex flex-col items-center justify-center gap-1 min-w-24">
-              <span class="font-semibold"><span class="text-blue-400">{{ row.original.wins }}</span> V <span class="text-dimmed">|</span> <span class="text-rose-400">{{ row.original.losses }}</span> D</span>
-              <UProgress v-model="row.original.wins" :max="row.original.wins + row.original.losses" size="lg" class="max-w-26 w-full" :ui="{ base: 'bg-rose-400', indicator: 'bg-blue-400 rounded-none' }" />
-            </div>
-          </template>
-          <template #matches-cell="{ row }">
-            <div v-if="row.original.wins || row.original.losses" class="flex items-center justify-center">
-              {{ (row.original.wins || 0) + (row.original.losses || 0) }}
-            </div>
-          </template>
-          <template #winRate-cell="{ row }">
-            <div class="flex items-center justify-center">
-              {{
-                row.original.wins && row.original.losses
-                  ? ((row.original.wins / (row.original.wins + row.original.losses)) * 100).toFixed(2) + '%'
-                  : ''
-              }}
-            </div>
-          </template>
-        </UTable>
+        />
+
         <div class="flex flex-col lg:flex-row justify-between items-center px-4 py-3.5 border-t border-default gap-2">
           <div class="text-sm text-muted">
             Mostrando {{ Math.min((table?.tableApi?.getState().pagination.pageIndex || 0) * pagination.pageSize + 1, table?.tableApi?.getFilteredRowModel().rows.length || 0) }} - {{ Math.min(((table?.tableApi?.getState().pagination.pageIndex || 0) + 1) * pagination.pageSize, table?.tableApi?.getFilteredRowModel().rows.length || 0) }} de {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }}

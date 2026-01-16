@@ -211,9 +211,9 @@ onUnmounted(() => {
               <div v-if="account.wins || account.losses" class="text-sm text-neutral-400 font-semibold"><span class="text-blue-400">{{ account.wins }}</span>V · <span class="text-rose-400">{{ account.losses }}</span>D (<span class="text-white">{{ (account.wins || 0) + (account.losses || 0) }}</span>)</div>
               <span v-if="account.wins || account.losses" class="text-base font-semibold text-white">
                 {{
-                  account.wins && account.losses
-                    ? ((account.wins / (account.wins + account.losses)) * 100).toFixed(2) + '% WR'
-                    : 'N/A'
+                  account.wins || account.losses
+                    ? (((account.wins || 0) / ((account.wins || 0) + (account.losses || 0))) * 100).toFixed(2) + '% WR'
+                    : ''
                 }}
               </span>
             </div>
