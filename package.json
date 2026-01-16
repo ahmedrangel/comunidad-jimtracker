@@ -32,7 +32,7 @@
     "test:types": "vue-tsc -b --noEmit"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.84",
+    "@iconify-json/lucide": "^1.2.85",
     "@iconify-json/simple-icons": "^1.2.66",
     "@libsql/client": "^0.17.0",
     "@nuxt/eslint": "^1.12.1",
@@ -41,7 +41,7 @@
     "@nuxtjs/sitemap": "^7.5.2",
     "@twurple/api": "^8.0.3",
     "@twurple/auth": "^8.0.3",
-    "@types/node": "^25.0.8",
+    "@types/node": "^25.0.9",
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
     "eslint": "^9.39.2",
@@ -49,13 +49,13 @@
     "nuxt-auth-utils": "^0.5.27",
     "nuxt-twemoji": "^3.8.1",
     "sass": "^1.97.2",
-    "stylelint": "^16.26.1",
-    "stylelint-config-standard-scss": "^16.0.0",
+    "stylelint": "^17.0.0",
+    "stylelint-config-standard-scss": "^17.0.0",
     "twisted": "^1.72.2",
     "typescript": "^5.9.3",
-    "ufo": "^1.6.2",
+    "ufo": "^1.6.3",
     "vue-tsc": "^3.2.2",
-    "wrangler": "^4.59.1",
+    "wrangler": "^4.59.2",
     "zod": "^4.3.5"
   },
   "packageManager": "pnpm@10.28.0"
