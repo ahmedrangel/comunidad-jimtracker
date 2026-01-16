@@ -143,7 +143,15 @@ const columns: TableColumn<any>[] = [
         onClick: () => column.toggleSorting()
       });
     },
-    cell: ({ row }) => h(TableCellWinLosses, { row })
+    cell: ({ row }) => h(TableCellWinLosses, { row }),
+    sortingFn: (rowA, rowB, columnId) => {
+      const aWins = rowA.original.wins || 0;
+      const aLosses = rowA.original.losses || 0;
+      const bWins = rowB.original.wins || 0;
+      const bLosses = rowB.original.losses || 0;
+
+      return aWins !== bWins ? aWins - bWins : bLosses - aLosses;
+    }
   },
   {
     id: "matches",
