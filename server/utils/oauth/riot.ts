@@ -44,6 +44,11 @@ export interface OAuthRiotGamesConfig {
   apiURL?: string;
 
   /**
+   * Extra authorization parameters to provide to the authorization URL
+   */
+  authorizationParams?: Record<string, string>;
+
+  /**
    * Redirect URL to to allow overriding for situations like prod failing to determine public hostname
    * @default process.env.NUXT_OAUTH_RIOT_REDIRECT_URL
    */
@@ -75,7 +80,7 @@ interface RiotGamesTokens {
 export function defineOAuthRiotGamesEventHandler ({ config, onSuccess, onError }: OAuthConfig<OAuthRiotGamesConfig, { user: RiotGamesUser, tokens: RiotGamesTokens }>) {
   return eventHandler(async (event: H3Event) => {
     config = defu(config, useRuntimeConfig(event)?.riot, {
-      authorizationURL: "https://auth.riotgames.com/authorize?prompt=login",
+      authorizationURL: "https://auth.riotgames.com/authorize",
       tokenURL: "https://auth.riotgames.com/token",
       apiURL: "https://auth.riotgames.com"
     }) as OAuthRiotGamesConfig;
@@ -112,7 +117,8 @@ export function defineOAuthRiotGamesEventHandler ({ config, onSuccess, onError }
           redirect_uri: redirectURL,
           response_type: "code",
           scope: config.scope.join(" "),
-          state
+          state,
+          ...config.authorizationParams
         })
       );
     }

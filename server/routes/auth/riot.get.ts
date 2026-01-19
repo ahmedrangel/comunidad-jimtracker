@@ -4,7 +4,10 @@ import { withQuery } from "ufo";
 
 export default defineOAuthRiotGamesEventHandler({
   config: {
-    scope: ["cpid"]
+    scope: ["cpid"],
+    authorizationParams: {
+      prompt: "login"
+    }
   },
   async onSuccess (event, result) {
     const { user } = await requireUserSession(event);
