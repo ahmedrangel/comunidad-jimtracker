@@ -173,8 +173,13 @@ onUnmounted(() => {
           <div v-for="account in riotAccounts" :key="account.puuid" class="relative rounded-md border-2 border-accented p-4 flex flex-col justify-center gap-2 bg-black/20">
             <div class="flex items-center justify-center gap-2 text-xl flex-wrap">
               <img v-if="account.profileIcon !== null" :src="getIconURL(account.profileIcon)" class="w-10 h-10 rounded-full border border-default shadow-lg shadow-black/20" :alt="`Icono de perfil de ${account.gameName}`">
-              <span class="font-semibold">{{ account.gameName }}</span>
-              <span class="text-muted">#{{ account.tagLine }}</span>
+              <NuxtLink
+                :to="`https://op.gg/es/lol/summoners/${getRegionLabel(account.region)}/${account.gameName}-${account.tagLine}`"
+                target="_blank"
+                class="font-semibold hover:underline"
+              >
+                <span>{{ account.gameName }} <span class="font-normal text-muted">#{{ account.tagLine }}</span></span>
+              </NuxtLink>
               <RegionBadge :region="account.region" size="md" />
             </div>
             <div v-if="isOwner" class="absolute top-2 right-2 text-xs text-white rounded">
