@@ -250,7 +250,7 @@ const tablePopover = useTablePopover();
 
 <template>
   <div class="max-w-300 w-full">
-    <div class="flex justify-between items-center gap-2 px-4 py-3.5">
+    <div class="flex justify-between items-center gap-2 pb-3.5">
       <UInput
         v-model="searchInput"
         placeholder="Escribe para filtrar..."
