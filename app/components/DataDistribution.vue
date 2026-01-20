@@ -127,7 +127,7 @@ const tabItems = [
       </template>
 
       <template #region>
-        <div class="grid grid-cols-3 sm:grid-cols-4 gap-0 pt-4">
+        <div class="grid grid-cols-3 sm:grid-cols-4 gap-0">
           <UCard
             v-for="stat in regionStats"
             :key="stat.region"
