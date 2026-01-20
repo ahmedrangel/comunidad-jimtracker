@@ -26,6 +26,8 @@ declare global {
     losses: number | null;
     profileIcon: number | null;
     verified: boolean;
+    role1: string | null;
+    role2: string | null;
     createdAt: number;
     updatedAt: number;
   }

@@ -57,6 +57,32 @@ const tierStats = computed(() => {
     });
 });
 
+const roleStats = computed(() => {
+  const stats = new Map<string, number>();
+
+  props.data.forEach((item) => {
+    if (item.role1) {
+      stats.set(item.role1, (stats.get(item.role1) || 0) + 1);
+    }
+    if (item.role2) {
+      stats.set(item.role2, (stats.get(item.role2) || 0) + 1);
+    }
+  });
+
+  const roleOrder = ["top", "jungle", "mid", "adc", "support", "fill"];
+
+  return Array.from(stats.entries())
+    .map(([role, count]) => ({
+      role,
+      count
+    }))
+    .sort((a, b) => {
+      const indexA = roleOrder.indexOf(a.role);
+      const indexB = roleOrder.indexOf(b.role);
+      return indexA - indexB;
+    });
+});
+
 const tablePopover = useTablePopover();
 </script>
 
@@ -106,7 +132,7 @@ const tablePopover = useTablePopover();
     </div>
     <div class="space-y-2">
       <h3 class="text-xl font-semibold">Tier</h3>
-      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+      <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 gap-2">
         <UCard
           v-for="stat in tierStats"
           :key="stat.tier"
@@ -122,6 +148,32 @@ const tablePopover = useTablePopover();
               :alt="stat.tier"
               class="w-12 h-12 object-contain"
             >
+            <div>
+              <p class="text-lg font-bold">{{ stat.count }}</p>
+            </div>
+          </div>
+        </UCard>
+      </div>
+    </div>
+    <div class="space-y-2">
+      <h3 class="text-xl font-semibold">Rol</h3>
+      <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-2">
+        <UCard
+          v-for="stat in roleStats"
+          :key="stat.role"
+          :ui="{
+            root: 'bg-elevated/50 ring-accented hover:bg-primary/5',
+            body: 'px-2 py-3 sm:px-2 sm:py-3',
+          }"
+          v-on="tablePopover.handlers(stat.role.toUpperCase())"
+        >
+          <div class="flex flex-col items-center text-center gap-1">
+            <Icon
+              :name="`lol:${stat.role}`"
+              class="w-6.5 h-6.5"
+              mode="css"
+              :alt="stat.role"
+            />
             <div>
               <p class="text-lg font-bold">{{ stat.count }}</p>
             </div>
