@@ -1,6 +1,6 @@
 export const SITE = {
-  title: "JimRising Tracker",
-  name: "JimTracker",
+  title: "Comunidad JimRising Tracker",
+  name: "Comunidad JimTracker",
   rootDomain: "jimtracker.com",
   domain: "comunidad.jimtracker.com",
   host: import.meta.dev ? "http://localhost:5173" : "https://comunidad.jimtracker.com",
