@@ -8,7 +8,7 @@ const { data } = await useFetch("/api/riot-accounts", {
 
 <template>
   <main class="flex justify-center items-center">
-    <div class="w-full max-w-7xl px-4">
+    <div class="max-w-7xl w-full">
       <TableData :data="data" />
       <USeparator class="my-8" />
       <LazyDataDistribution :data="data" hydrate-on-visible />

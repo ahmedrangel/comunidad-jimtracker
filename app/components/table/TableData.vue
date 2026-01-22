@@ -249,7 +249,7 @@ const tablePopover = useTablePopover();
 </script>
 
 <template>
-  <div class="max-w-300 w-full">
+  <div class="w-full mx-auto">
     <div class="flex justify-between items-center gap-2 pb-3.5">
       <UInput
         v-model="searchInput"

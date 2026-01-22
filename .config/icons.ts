@@ -21,5 +21,6 @@ export default [
   "lucide:chevron-left",
   "lucide:chevrons-right",
   "lucide:chevron-right",
-  "lucide:ellipsis"
+  "lucide:ellipsis",
+  "lucide:user"
 ];
