@@ -10,8 +10,8 @@ export default defineEventHandler(async (event) => {
   const twitchId = await getTwitchIdByLogin(event, params.name);
 
   const config = useRuntimeConfig(event);
-  const riot = new RiotApi(config.riot.apiKey);
-  const lol = new LolApi(config.riot.apiKey);
+  const riot = new RiotApi(config.oauth.riotgames.apiKey);
+  const lol = new LolApi(config.oauth.riotgames.apiKey);
   const authProvider = new AppTokenAuthProvider(config.oauth.twitch.clientId, config.oauth.twitch.clientSecret);
   const twitch = new ApiClient({ authProvider });
   const body = await readBody(event);

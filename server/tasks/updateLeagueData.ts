@@ -22,7 +22,7 @@ export default defineTask({
     }).from(tables.riotAccounts).orderBy(asc(tables.riotAccounts.updatedAt)).limit(100).all();
 
     const config = useRuntimeConfig();
-    const lol = new LolApi(config.riot.apiKey);
+    const lol = new LolApi(config.oauth.riotgames.apiKey);
 
     const leagueDataPromises = riotAccounts.map(account => lol.League.byPUUID(account.puuid, account.region as Regions));
 

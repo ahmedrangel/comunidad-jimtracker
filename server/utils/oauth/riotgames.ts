@@ -9,12 +9,12 @@ import type { OAuthConfig } from "#auth-utils";
 export interface OAuthRiotGamesConfig {
   /**
    * RiotGames OAuth Client ID
-   * @default process.env.NUXT_OAUTH_RIOT_CLIENT_ID
+   * @default process.env.NUXT_OAUTH_RIOTGAMES_CLIENT_ID
    */
   clientId?: string;
   /**
    * RiotGames OAuth Client Secret
-   * @default process.env.NUXT_OAUTH_RIOT_CLIENT_SECRET
+   * @default process.env.NUXT_OAUTH_RIOTGAMES_CLIENT_SECRET
    */
   clientSecret?: string;
   /**
@@ -50,9 +50,15 @@ export interface OAuthRiotGamesConfig {
 
   /**
    * Redirect URL to to allow overriding for situations like prod failing to determine public hostname
-   * @default process.env.NUXT_OAUTH_RIOT_REDIRECT_URL
+   * @default process.env.NUXT_OAUTH_RIOTGAMES_REDIRECT_URL
    */
   redirectURL?: string;
+
+  /**
+   * API routing values for Accounts Endpoint. You can query for any account in any region.
+   * @default 'europe'
+   */
+  region?: "americas" | "europe" | "asia";
 }
 
 interface RiotGamesUser extends RiotGamesAccount, Partial<RiotGamesUserInfo> {}
@@ -79,10 +85,11 @@ interface RiotGamesTokens {
 
 export function defineOAuthRiotGamesEventHandler ({ config, onSuccess, onError }: OAuthConfig<OAuthRiotGamesConfig, { user: RiotGamesUser, tokens: RiotGamesTokens }>) {
   return eventHandler(async (event: H3Event) => {
-    config = defu(config, useRuntimeConfig(event)?.riot, {
+    config = defu(config, useRuntimeConfig(event)?.oauth.riotgames, {
       authorizationURL: "https://auth.riotgames.com/authorize",
       tokenURL: "https://auth.riotgames.com/token",
-      apiURL: "https://auth.riotgames.com"
+      apiURL: "https://auth.riotgames.com",
+      region: "europe"
     }) as OAuthRiotGamesConfig;
 
     const query = getQuery<{ code?: string, error?: string, state?: string }>(event);
@@ -153,7 +160,7 @@ export function defineOAuthRiotGamesEventHandler ({ config, onSuccess, onError }
       });
     }
 
-    const account = await $fetch<RiotGamesAccount>("https://americas.api.riotgames.com/riot/account/v1/accounts/me", {
+    const account = await $fetch<RiotGamesAccount>(`https://${config.region}.api.riotgames.com/riot/account/v1/accounts/me`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }

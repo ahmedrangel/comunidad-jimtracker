@@ -5,6 +5,7 @@ import { withQuery } from "ufo";
 export default defineOAuthRiotGamesEventHandler({
   config: {
     scope: ["cpid"],
+    region: "americas",
     authorizationParams: {
       prompt: "login"
     }
@@ -19,7 +20,7 @@ export default defineOAuthRiotGamesEventHandler({
     }
 
     const config = useRuntimeConfig(event);
-    const lol = new LolApi(config.riot.apiKey);
+    const lol = new LolApi(config.oauth.riotgames.apiKey);
     const existing = await db.select().from(tables.riotAccounts).where(and(
       eq(tables.riotAccounts.puuid, result.user.puuid)
     )).get();
