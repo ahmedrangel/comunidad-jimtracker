@@ -54,7 +54,7 @@ const userMenu: DropdownMenuItem[][] = [
 
     <template #title>
       <div class="flex items-center gap-2">
-        <img :src="SITE.logo" :alt="SITE.name" class="h-10 w-auto">
+        <img :src="SITE.logo" :alt="SITE.name" class="h-8 w-auto">
         <h1>Comunidad</h1>
       </div>
     </template>
