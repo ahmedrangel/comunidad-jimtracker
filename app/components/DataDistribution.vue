@@ -101,8 +101,8 @@ const tabItems = [
       :items="tabItems"
       class="w-full"
       :ui="{
-        list: 'border border-accented bg-default mb-4',
-        trigger: 'data-[state=inactive]:text-default',
+        list: 'border border-accented bg-default mb-4 lg:gap-1',
+        trigger: 'data-[state=inactive]:text-default hover:data-[state=inactive]:bg-elevated',
       }"
     >
       <template #country>
