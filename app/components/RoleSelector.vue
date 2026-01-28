@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  data: any;
+  data: Omit<JimTableData, "rank" | "eloValue">;
 }>();
 
 const { user } = useUserSession();
@@ -42,14 +42,16 @@ const selectRole = async (event: { role: string | null, slot: 1 | 2 }) => {
   modalRole1.value = false;
   modalRole2.value = false;
 
-  await $fetch(`/api/users/${props.data.user.twitchLogin}/riot-accounts/${props.data.puuid}`, {
+  $fetch(`/api/users/${props.data.user.twitchLogin}/riot-accounts/${props.data.puuid}`, {
     method: "PATCH",
     body: {
       puuid: props.data.puuid,
       role1: selectedRole1.value,
       role2: selectedRole2.value
     }
-  });
+  }).then(() => {
+    useCachedData("riot-accounts", () => undefined);
+  }).catch(() => {});
 };
 
 const handleModalOwnerUpdate = () => {
