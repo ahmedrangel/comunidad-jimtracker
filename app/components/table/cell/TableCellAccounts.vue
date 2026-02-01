@@ -42,7 +42,7 @@ const isOnlineChatter = computed(() => {
       </div>
     </div>
     <div class="flex items-center gap-1">
-      <img v-if="data.user.twitchProfileImage" :src="data.user.twitchProfileImage" class="w-5 h-5 rounded-sm" :alt="data.user.twitchDisplay">
+      <img v-if="data.user.twitchProfileImage" :src="data.user.twitchProfileImage.replace('300x300', '50x50')" class="w-5 h-5 rounded-sm" :alt="data.user.twitchDisplay">
       <NuxtLink :to="`/u/${data.user.twitchLogin}`" class="hover:underline flex items-center gap-1">
         <span class="text-xs text-muted font-semibold">{{ data.user.twitchDisplay }}</span>
       </NuxtLink>
