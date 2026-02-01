@@ -279,24 +279,30 @@ for (const item of props.data) {
           ).map(country => ({ label: getCountryName(country), value: country })),
         ]"
       >
+        <template #leading>
+          <Twemoji
+            v-if="preferences.country"
+            :emoji="preferences.country"
+            :alt="getCountryName(preferences.country)"
+            class="shrink-0"
+            size="1.3rem"
+          />
+          <Icon v-else name="lucide:globe" class="shrink-0 text-dimmed size-5" />
+        </template>
         <template #item-leading="{ item }">
           <Twemoji
-            v-if="item.value !== 'País'"
             :emoji="item.value"
             :alt="getCountryName(item.value)"
             size="1.5em"
           />
-          <Icon v-else name="lucide:globe" size="1.5em" mode="css" />
         </template>
         <template #item="{ item }">
           <div class="flex items-center gap-2 min-w-[12ch] shrink-0">
             <Twemoji
-              v-if="item.value !== ''"
               :emoji="item.value"
               :alt="getCountryName(item.value)"
               size="1.5em"
             />
-            <Icon v-else name="lucide:globe" size="1.5em" mode="css" />
             <span>{{ item.label }}</span>
           </div>
         </template>
