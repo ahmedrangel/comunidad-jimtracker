@@ -22,5 +22,6 @@ export default [
   "lucide:chevrons-right",
   "lucide:chevron-right",
   "lucide:ellipsis",
-  "lucide:user"
+  "lucide:user",
+  "tabler:circle-filled"
 ];

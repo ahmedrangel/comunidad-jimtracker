@@ -4,8 +4,9 @@ import type { Row, SortDirection, TableMeta } from "@tanstack/vue-table";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 import { refDebounced } from "@vueuse/core";
 
-defineProps<{
+const props = defineProps<{
   data: JimTableData[];
+  chatters: string[];
 }>();
 
 const { user } = useUserSession();
@@ -66,7 +67,7 @@ const columns: TableColumn<JimTableData>[] = [
         onClick: () => column.toggleSorting()
       });
     },
-    cell: ({ row }) => h(TableCellAccounts, { data: row.original }),
+    cell: ({ row }) => h(TableCellAccounts, { data: row.original, chatters: props.chatters }),
     filterFn: (row, columnId, search) => {
       if (!search) return true;
 

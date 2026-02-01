@@ -14,6 +14,9 @@ importers:
       '@iconify-json/simple-icons':
         specifier: ^1.2.68
         version: 1.2.68
+      '@iconify-json/tabler':
+        specifier: ^1.2.26
+        version: 1.2.26
       '@libsql/client':
         specifier: ^0.17.0
         version: 0.17.0
@@ -1093,6 +1096,9 @@ packages:
 
   '@iconify-json/simple-icons@1.2.68':
     resolution: {integrity: sha512-bQPl1zuZlX6AnofreA1v7J+hoPncrFMppqGboe/SH54jZO37meiBUGBqNOxEpc0HKfZGxJaVVJwZd4gdMYu3hw==}
+
+  '@iconify-json/tabler@1.2.26':
+    resolution: {integrity: sha512-92G+ZD70AZgeJf07JfQzH+isnai6DwPcMBuF/qL1F+xAxdXCJzGd3w2RmsRvOmB+w1ImmWEEDms50QivQIjd6g==}
 
   '@iconify/collections@1.0.643':
     resolution: {integrity: sha512-mtXKNYlunC/HaEB+IwnJOw+dZ6Z7QwrUr4484qm/MiIk+7f8TyqDM9qYeJENEEDCWznyqR7ML/FNJ3F02nXF0g==}
@@ -7685,6 +7691,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/simple-icons@1.2.68':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/tabler@1.2.26':
     dependencies:
       '@iconify/types': 2.0.0
 

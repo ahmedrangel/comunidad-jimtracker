@@ -1,9 +1,14 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   data: JimTableData;
+  chatters: string[];
 }>();
 
 const tablePopover = useTablePopover();
+
+const isOnlineChatter = computed(() => {
+  return props.chatters.includes(props.data.user.twitchId);
+});
 </script>
 
 <template>
@@ -38,9 +43,18 @@ const tablePopover = useTablePopover();
     </div>
     <div class="flex items-center gap-1">
       <img v-if="data.user.twitchProfileImage" :src="data.user.twitchProfileImage" class="w-5 h-5 rounded-sm" :alt="data.user.twitchDisplay">
-      <NuxtLink :to="`/u/${data.user.twitchLogin}`" class="hover:underline">
+      <NuxtLink :to="`/u/${data.user.twitchLogin}`" class="hover:underline flex items-center gap-1">
         <span class="text-xs text-muted font-semibold">{{ data.user.twitchDisplay }}</span>
       </NuxtLink>
+      <Icon
+        v-if="isOnlineChatter"
+        name="tabler:circle-filled"
+        class="text-purple-400 animate-pulse"
+        size="0.75rem"
+        mode="css"
+        :alt="'En el chat'"
+        v-on="tablePopover.handlers('En el chat')"
+      />
     </div>
   </div>
 </template>
