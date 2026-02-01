@@ -81,7 +81,16 @@ const columns: TableColumn<JimTableData>[] = [
   },
   {
     accessorKey: "region",
-    header: () => {
+    header: (data) => {
+      const tableData = data.table.options.data as JimTableData[];
+      const regionSet = new Set<string>();
+      for (const item of tableData) {
+        regionSet.add(item.region);
+      }
+      const uniqueRegionMap = Array.from(regionSet).map(region => ({
+        label: getRegionLabel(region),
+        value: region
+      }));
       return h(USelect, {
         "modelValue": preferences.value.region,
         "onUpdate:modelValue": (value: string) => {
@@ -97,7 +106,7 @@ const columns: TableColumn<JimTableData>[] = [
         "color": "neutral",
         "variant": "subtle",
         "class": "min-w-24",
-        "items": [{ label: "Región", value: "ALL" }, ...regionMap]
+        "items": [{ label: "Región", value: "ALL" }, ...uniqueRegionMap]
       });
     },
     cell: ({ row }) => h(TableCellRegion, { data: row.original }),
