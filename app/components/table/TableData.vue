@@ -21,7 +21,6 @@ const TableCellElo = resolveComponent("TableCellElo");
 const TableCellRoles = resolveComponent("TableCellRoles");
 const TableCellWinLosses = resolveComponent("TableCellWinLosses");
 const TableCellWinRate = resolveComponent("TableCellWinRate");
-const TableCellMatches = resolveComponent("TableCellMatches");
 
 const setSortIcon = (isSorted?: false | SortDirection) => {
   return isSorted ? isSorted === "asc" ? "lucide:chevron-up" : "lucide:chevron-down" : "lucide:list-chevrons-up-down";
@@ -115,6 +114,11 @@ const columns: TableColumn<JimTableData>[] = [
     filterFn: "equals"
   },
   {
+    accessorKey: "roles",
+    header: "Roles",
+    cell: ({ row }) => h(TableCellRoles, { data: row.original })
+  },
+  {
     id: "elo",
     accessorKey: "eloValue",
     header: ({ column }) => {
@@ -136,9 +140,19 @@ const columns: TableColumn<JimTableData>[] = [
     }
   },
   {
-    accessorKey: "roles",
-    header: "Roles",
-    cell: ({ row }) => h(TableCellRoles, { data: row.original })
+    id: "winRate",
+    accessorFn: row => calculateWinRate(row.wins, row.losses),
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      return h(UButton, {
+        color: "neutral",
+        variant: "ghost",
+        label: "Winrate",
+        icon: setSortIcon(isSorted),
+        onClick: () => column.toggleSorting()
+      });
+    },
+    cell: ({ row }) => h(TableCellWinRate, { data: row.original })
   },
   {
     id: "wins-losses",
@@ -162,36 +176,6 @@ const columns: TableColumn<JimTableData>[] = [
 
       return aWins !== bWins ? aWins - bWins : bLosses - aLosses;
     }
-  },
-  {
-    id: "matches",
-    accessorFn: row => (row.wins || 0) + (row.losses || 0),
-    header: ({ column }) => {
-      const isSorted = column.getIsSorted();
-      return h(UButton, {
-        color: "neutral",
-        variant: "ghost",
-        label: "Partidas",
-        icon: setSortIcon(isSorted),
-        onClick: () => column.toggleSorting()
-      });
-    },
-    cell: ({ row }) => h(TableCellMatches, { data: row.original })
-  },
-  {
-    id: "winRate",
-    accessorFn: row => calculateWinRate(row.wins, row.losses),
-    header: ({ column }) => {
-      const isSorted = column.getIsSorted();
-      return h(UButton, {
-        color: "neutral",
-        variant: "ghost",
-        label: "Winrate",
-        icon: setSortIcon(isSorted),
-        onClick: () => column.toggleSorting()
-      });
-    },
-    cell: ({ row }) => h(TableCellWinRate, { data: row.original })
   }
 ];
 
