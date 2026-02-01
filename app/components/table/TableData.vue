@@ -307,7 +307,7 @@ for (const item of props.data) {
           </div>
         </template>
       </USelectMenu>
-      <UCheckbox v-model="preferences.hideUnrankeds" label="Ocultar unrankeds" />
+      <USwitch v-model="preferences.hideUnrankeds" label="Ocultar unrankeds" />
     </div>
     <div class="rounded-sm shadow bg-elevated/50 border border-accented">
       <UTable
