@@ -318,6 +318,7 @@ for (const item of props.data) {
         :meta="meta"
         :get-row-id="(row) => row.puuid"
         class="flex-1"
+        empty="No se encontraron datos"
         :ui="{ td: 'p-2 text-highlighted text-base', th: 'text-center' }"
         :pagination-options="{
           getPaginationRowModel: getPaginationRowModel(),
