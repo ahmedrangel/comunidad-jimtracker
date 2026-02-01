@@ -196,7 +196,7 @@ const meta: TableMeta<any> = {
 const preferences = ref({
   hideUnrankeds: false,
   region: "ALL",
-  country: "ALL"
+  country: ""
 });
 
 watch(() => preferences.value.hideUnrankeds, (newValue) => {
@@ -212,7 +212,7 @@ watch(() => preferences.value.hideUnrankeds, (newValue) => {
 watch(() => preferences.value.country, (newValue) => {
   const countryColumn = table.value?.tableApi?.getColumn("account");
   if (countryColumn) {
-    if (newValue === "ALL") {
+    if (newValue === "") {
       countryColumn.setFilterValue(undefined);
     }
     else {
@@ -267,21 +267,23 @@ for (const item of props.data) {
         trailing-icon="lucide:search"
         type="search"
       />
-      <USelect
+      <USelectMenu
         v-model="preferences.country"
         class="min-w-[30ch]"
+        clear
+        placeholder="País"
+        value-key="value"
         :items="[
-          { label: 'País', value: 'ALL' },
           ...Array.from(countriesSet).sort(
             (a, b) => getCountryName(a)!.localeCompare(getCountryName(b)!),
           ).map(country => ({ label: getCountryName(country), value: country })),
         ]"
       >
-        <template #leading="{ modelValue }">
+        <template #item-leading="{ item }">
           <Twemoji
-            v-if="modelValue !== 'ALL'"
-            :emoji="modelValue"
-            :alt="getCountryName(modelValue)"
+            v-if="item.value !== 'País'"
+            :emoji="item.value"
+            :alt="getCountryName(item.value)"
             size="1.5em"
           />
           <Icon v-else name="lucide:globe" size="1.5em" mode="css" />
@@ -289,7 +291,7 @@ for (const item of props.data) {
         <template #item="{ item }">
           <div class="flex items-center gap-2 min-w-[12ch] shrink-0">
             <Twemoji
-              v-if="item.value !== 'ALL'"
+              v-if="item.value !== ''"
               :emoji="item.value"
               :alt="getCountryName(item.value)"
               size="1.5em"
@@ -298,7 +300,7 @@ for (const item of props.data) {
             <span>{{ item.label }}</span>
           </div>
         </template>
-      </USelect>
+      </USelectMenu>
       <UCheckbox v-model="preferences.hideUnrankeds" label="Ocultar unrankeds" />
     </div>
     <div class="rounded-sm shadow bg-elevated/50 border border-accented">
