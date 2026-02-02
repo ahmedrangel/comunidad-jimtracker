@@ -154,7 +154,7 @@ onUnmounted(() => {
             <Icon name="lucide:message-square-more" />
             <span class="font-semibold uppercase text-xs">Mensaje</span>
           </div>
-          {{ userInfo.bio }}
+          <span>{{ userInfo.bio }}</span>
         </div>
         <UModal v-if="isOwner" title="Editar Perfil">
           <UButton label="Editar perfil" icon="lucide:pencil" variant="subtle" class="py-4" />
