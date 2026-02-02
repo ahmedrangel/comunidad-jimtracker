@@ -15,7 +15,6 @@ A full-stack serverless League of Legends multi-regional leaderboard tracker for
 
 ## Screenshots
 
-
 ### Leaderboard Table
 ![table](https://github.com/user-attachments/assets/e360ae78-55c7-4b42-93a7-7daec2434a8f)
 
@@ -25,8 +24,6 @@ A full-stack serverless League of Legends multi-regional leaderboard tracker for
 ### Profile Page
 ![profile](https://github.com/user-attachments/assets/b393b90c-c714-4fc7-80cc-5a07873a7419)
 
-
-
 ## Tech stack
 
 - **Framework**: [Nuxt 4](https://nuxt.com/), the [Vue](https://vuejs.org/) framework for bringing the best development experience and [NuxtHub](https://hub.nuxt.com/) features.
@@ -35,7 +32,7 @@ A full-stack serverless League of Legends multi-regional leaderboard tracker for
 - **Database**: [Cloudflare D1](https://developers.cloudflare.com/d1/) serverless SQL database.
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/) TypeScript ORM for SQL databases.
 - **Task Scheduling**: [Cloudflare Cron Triggers](https://developers.cloudflare.com/workers/configuration/cron-triggers/).
-- **APIs**: 
+- **APIs**:
   - [twisted](https://github.com/Sansossio/twisted): Riot Games API wrapper.
   - [twurple](https://github.com/twurple/twurple): Twitch API wrapper.
 - **Authentication**: [nuxt-auth-utils](https://github.com/Atinux/nuxt-auth-utils) sessions and OAuth integrations.
