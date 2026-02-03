@@ -67,17 +67,18 @@ const columns: TableColumn<JimTableData>[] = [
       });
     },
     cell: ({ row }) => h(TableCellAccounts, { data: row.original, chatters: props.chatters }),
-    filterFn: (row, columnId, search) => {
-      if (!search) return true;
-
-      const gameNameMatch = noSpaced(row.original.gameName).includes(search);
-      const tagLineMatch = noSpaced(row.original.tagLine).includes(search);
-      const nameTagMatch = noSpaced(`${row.original.gameName}#${row.original.tagLine}`).includes(search);
-      const twitchDisplayMatch = noSpaced(row.original.user?.twitchDisplay).includes(search);
-      const twitchLoginMatch = noSpaced(row.original.user?.twitchLogin).includes(search);
-      const countryMatch = noSpaced(row.original.user?.country).includes(search);
-
-      return gameNameMatch || tagLineMatch || nameTagMatch || twitchDisplayMatch || twitchLoginMatch || countryMatch;
+    filterFn: (row, columnId, { country, search }: { country?: string, search?: string }) => {
+      if (country && row.original.user?.country !== country) return false;
+      if (search) {
+        const gameNameMatch = noSpaced(row.original.gameName).includes(search);
+        const tagLineMatch = noSpaced(row.original.tagLine).includes(search);
+        const nameTagMatch = noSpaced(`${row.original.gameName}#${row.original.tagLine}`).includes(search);
+        const twitchDisplayMatch = noSpaced(row.original.user?.twitchDisplay).includes(search);
+        const twitchLoginMatch = noSpaced(row.original.user?.twitchLogin).includes(search);
+        const countryMatch = noSpaced(row.original.user?.country).includes(search);
+        return gameNameMatch || tagLineMatch || nameTagMatch || twitchDisplayMatch || twitchLoginMatch || countryMatch;
+      }
+      return true;
     }
   },
   {
@@ -209,21 +210,9 @@ watch(() => preferences.value.hideUnrankeds, (newValue) => {
   table.value?.tableApi?.setPageIndex(0);
 });
 
-watch(() => preferences.value.country, (newValue) => {
-  const countryColumn = table.value?.tableApi?.getColumn("account");
-  if (countryColumn) {
-    if (newValue === "") {
-      countryColumn.setFilterValue(undefined);
-    }
-    else {
-      countryColumn.setFilterValue(newValue);
-    }
-  }
+watch([debouncedSearch, () => preferences.value.country], ([search, country]) => {
+  table.value?.tableApi?.getColumn("account")?.setFilterValue({ country, search: noSpaced(search) });
   table.value?.tableApi?.setPageIndex(0);
-});
-
-watch(debouncedSearch, (value) => {
-  table.value?.tableApi?.getColumn("account")?.setFilterValue(noSpaced(value));
 });
 
 onMounted(() => {
