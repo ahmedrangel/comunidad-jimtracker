@@ -62,31 +62,51 @@ const deleteAccount = async () => {
 </script>
 
 <template>
-  <form v-if="user" class="space-y-2" @submit.prevent="editProfile">
-    <h3 class="font-semibold">Información</h3>
-    <InputFloating id="user" v-model="user.twitchDisplay" placeholder="User" disabled />
-    <!--
-    <USelectMenu id="country" v-model="form.country" :items="countriesMenu" value-key="value" placeholder="País" icon="lucide:search" size="xl" class="w-full" clear>
-      <template #leading="{ modelValue }">
-        <Twemoji v-if="modelValue" :emoji="modelValue" size="1.5rem" />
-      </template>
-      <template #item-leading="{ item }">
-        <Twemoji v-if="item" :emoji="item.value" size="1.5rem" />
-      </template>
-    </USelectMenu>
-    -->
-    <UFormField help="Escribe un mensaje que se mostrará públicamente en la tabla de la comunidad y en tu perfil.">
-      <UTextarea
-        v-model.trim="form.bio"
-        class="w-full"
-        placeholder="Escribe algo..."
-        icon="lucide:message-square-more"
-        autoresize
-      />
-    </UFormField>
-    <UButton type="submit" label="Guardar cambios" variant="subtle" :loading="isEditing" :disabled="isEditing" block />
-    <USeparator />
-    <h3 class="font-semibold">Avanzado</h3>
-    <UButton label="Eliminar cuenta" color="error" variant="subtle" :loading="isDeleting" :disabled="isDeleting" block @click="deleteAccount" />
-  </form>
+  <UModal title="Editar Perfil">
+    <UButton label="Editar perfil" icon="lucide:pencil" variant="subtle" class="py-4" />
+    <template #body="{ close }">
+      <form v-if="user" class="space-y-2" @submit.prevent="editProfile(); close();">
+        <h3 class="font-semibold">Información</h3>
+        <InputFloating id="user" v-model="user.twitchDisplay" placeholder="User" disabled />
+        <!--
+        <USelectMenu id="country" v-model="form.country" :items="countriesMenu" value-key="value" placeholder="País" icon="lucide:search" size="xl" class="w-full" clear>
+          <template #leading="{ modelValue }">
+            <Twemoji v-if="modelValue" :emoji="modelValue" size="1.5rem" />
+          </template>
+          <template #item-leading="{ item }">
+            <Twemoji v-if="item" :emoji="item.value" size="1.5rem" />
+          </template>
+        </USelectMenu>
+        -->
+        <UFormField help="Escribe un mensaje que se mostrará públicamente en la tabla de la comunidad y en tu perfil.">
+          <UTextarea
+            v-model.trim="form.bio"
+            class="w-full"
+            placeholder="Escribe algo..."
+            icon="lucide:message-square-more"
+            autoresize
+          />
+        </UFormField>
+        <UButton type="submit" label="Guardar cambios" variant="subtle" :loading="isEditing" :disabled="isEditing" block />
+      </form>
+    </template>
+    <template #footer>
+      <UCollapsible class="w-full">
+        <UButton
+          label="Avanzado"
+          color="neutral"
+          variant="link"
+          trailing-icon="i-lucide-chevron-down"
+          class="p-0"
+          :ui="{ label: 'text-base' }"
+          block
+        />
+        <template #content>
+          <UFormField help="Eliminar tu cuenta eliminará permanentemente todos tus datos. Esta acción no se puede deshacer.">
+            <UButton label="Eliminar cuenta" class="mt-2" color="error" variant="subtle" :loading="isDeleting" :disabled="isDeleting" block @click="deleteAccount" />
+          </UFormField>
+        </template>
+      </UCollapsible>
+    </template>
+  </UModal>
 </template>

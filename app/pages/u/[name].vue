@@ -156,12 +156,7 @@ onUnmounted(() => {
           </div>
           <span>{{ userInfo.bio }}</span>
         </div>
-        <UModal v-if="isOwner" title="Editar Perfil">
-          <UButton label="Editar perfil" icon="lucide:pencil" variant="subtle" class="py-4" />
-          <template #body="{ close }">
-            <EditProfile v-model="userInfo" @edit="close" />
-          </template>
-        </UModal>
+        <EditProfile v-if="isOwner" v-model="userInfo" />
         <UButton class="w-full py-4 flex items-center gap-2" variant="subtle" color="info" :loading="isUpdating" :disabled="!canUpdate || isUpdating" @click="updateProfile">
           <Icon v-if="!isUpdating" name="lucide:refresh-cw" class="w-5 h-5" />
           <span v-if="canUpdate">{{ isUpdating ? "Actualizando..." : "Actualizar" }}</span>
