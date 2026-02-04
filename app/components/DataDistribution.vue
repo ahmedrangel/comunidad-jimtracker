@@ -159,8 +159,8 @@ const tabItems = [
           >
             <div class="flex flex-col items-center text-center gap-1">
               <img
-                :src="`/images/lol/${stat.tier?.toLowerCase() || 'unranked'}.png`"
-                :alt="stat.tier"
+                :src="getTierImage(stat.tier)"
+                :alt="getTierLabel(stat.tier)"
                 class="w-12 h-12 object-contain"
               >
               <div>
