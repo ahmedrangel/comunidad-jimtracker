@@ -15,7 +15,8 @@ export const users = sqliteTable("users", {
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
   updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))
 }, table => [
-  index("users_twitch_login_idx").on(table.twitchLogin)
+  index("users_twitch_login_idx").on(table.twitchLogin),
+  index("users_updated_at_idx").on(table.updatedAt)
 ]);
 
 export const riotAccounts = sqliteTable("riot_accounts", {
@@ -35,7 +36,10 @@ export const riotAccounts = sqliteTable("riot_accounts", {
   role2: text(),
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
   updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))
-});
+}, table => [
+  index("riot_accounts_twitch_id_idx").on(table.twitchId),
+  index("riot_accounts_updated_at_idx").on(table.updatedAt)
+]);
 
 export const channelModerators = sqliteTable("channel_moderators", {
   twitchId: text().primaryKey(),
@@ -54,7 +58,11 @@ export const riotAccountLogs = sqliteTable("riot_account_logs", {
   data: text({ mode: "json" }).$type<JimRiotAccountLogData>().notNull(),
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
   updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))
-});
+}, table => [
+  index("riot_account_logs_created_at_idx").on(table.createdAt),
+  index("riot_account_logs_puuid_idx").on(table.puuid),
+  index("riot_account_logs_twitch_id_idx").on(table.twitchId)
+]);
 
 export const logReactions = sqliteTable("log_reactions", {
   id: integer().primaryKey(),
@@ -64,5 +72,6 @@ export const logReactions = sqliteTable("log_reactions", {
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
   updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))
 }, table => [
-  unique("log_reactions_log_id_twitch_id_idx").on(table.logId, table.twitchId)
+  unique("log_reactions_log_id_twitch_id_idx").on(table.logId, table.twitchId),
+  index("log_reactions_twitch_id_idx").on(table.twitchId)
 ]);
