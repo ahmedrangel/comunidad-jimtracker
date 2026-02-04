@@ -14,6 +14,6 @@ const tablePopover = useTablePopover();
       :alt="data.tier || 'UNRANKED'"
       v-on="tablePopover.handlers(data.tier || 'UNRANKED')"
     >
-    <span v-if="data.tier && (data.division || data.lp)"><span v-if="!['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(data.tier)">{{ data.division }} · </span>{{ data.lp }} LP</span>
+    <span v-if="data.tier && (data.division || data.lp)"><span v-if="!isApexTier(data.tier)">{{ data.division }} · </span>{{ data.lp }} LP</span>
   </div>
 </template>

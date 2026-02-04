@@ -235,7 +235,7 @@ onUnmounted(() => {
                     </template>
                   </UPopover>
                   <span v-if="account.division" class="font-semibold text-xl">
-                    <span v-if="account.tier && !['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(account.tier)">{{ account.division }}</span>
+                    <span v-if="account.tier && !isApexTier(account.tier)">{{ account.division }}</span>
                     <span> · </span>
                     <span>{{ account.lp }} LP</span>
                   </span>
