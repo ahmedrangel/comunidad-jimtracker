@@ -27,5 +27,8 @@ export default [
   "lucide:globe",
   "lucide:moon",
   "lucide:sun",
-  "lucide:arrow-right"
+  "lucide:arrow-right",
+  "lucide:trending-up",
+  "lucide:trending-down",
+  "lucide:smile-plus"
 ];

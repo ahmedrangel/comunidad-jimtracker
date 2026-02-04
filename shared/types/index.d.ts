@@ -18,7 +18,7 @@ declare global {
     twitchId: string;
     gameName: string;
     tagLine: string;
-    region: string;
+    region: Regions;
     tier: string | null;
     division: string | null;
     lp: number | null;
@@ -32,7 +32,7 @@ declare global {
     updatedAt: number;
   }
 
-  interface JimTableData extends Omit<JimRiotAccount, "twitchId" | "profileIcon" | "verified" | "createdAt" | "updatedAt"> {
+  interface JimTableData extends Omit<JimRiotAccount, "twitchId" | "verified" | "createdAt" | "updatedAt"> {
     rank: number;
     eloValue: number;
     user: Omit<JimUser, "twitchCumulativeMonths" | "twitchSubExpiration" | "badges" | "createdAt">;

@@ -13,6 +13,7 @@ export default defineEventHandler(async () => {
     lp: tables.riotAccounts.lp,
     wins: tables.riotAccounts.wins,
     losses: tables.riotAccounts.losses,
+    profileIcon: tables.riotAccounts.profileIcon,
     role1: tables.riotAccounts.role1,
     role2: tables.riotAccounts.role2,
     // Campos de usuario

@@ -14,6 +14,10 @@ const pages: NavigationMenuItem[] = [
     to: "/"
   },
   {
+    label: "Actividad",
+    to: "/actividad"
+  },
+  {
     label: "JimTracker",
     to: "https://" + SITE.rootDomain
   }
