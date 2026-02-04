@@ -226,7 +226,7 @@ onUnmounted(() => {
                     <UButton variant="link" class="p-0">
                       <img
                         :src="getTierImage(account.tier)"
-                        class="w-12 h-12 md:w-12 md:h-12 max-w-fit"
+                        class="w-12 h-12 max-w-fit"
                         :alt="getTierLabel(account.tier)"
                       >
                     </UButton>
@@ -305,11 +305,8 @@ onUnmounted(() => {
                     </template>
                   </UPopover>
                   <span class="text-sm font-semibold">
-                    <template v-if="!isApexTier(log.data.old.tier)">
-                      <span>{{ log.data.old.division }}</span>
-                      <span> · </span>
-                    </template>
-                    <span>{{ log.data.old.lp }} LP</span>
+                    <span>{{ getTierLabel(log.data.old.tier) }}</span>
+                    <span v-if="!isApexTier(log.data.old.tier)">&nbsp;{{ log.data.old.division }}</span>
                   </span>
                 </div>
                 <Icon name="lucide:arrow-right" />
@@ -327,11 +324,8 @@ onUnmounted(() => {
                     </template>
                   </UPopover>
                   <span class="text-sm font-semibold">
-                    <template v-if="!isApexTier(log.data.new.tier)">
-                      <span>{{ log.data.new.division }}</span>
-                      <span> · </span>
-                    </template>
-                    <span>{{ log.data.new.lp }} LP</span>
+                    <span>{{ getTierLabel(log.data.new.tier) }}</span>
+                    <span v-if="!isApexTier(log.data.new.tier)">&nbsp;{{ log.data.new.division }}</span>
                   </span>
                 </div>
               </div>
