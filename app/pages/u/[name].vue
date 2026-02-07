@@ -74,8 +74,10 @@ const updateProfile = async () => {
     userInfo.value = response.user;
     useCachedData(`user:${name}`, () => userInfo.value);
     riotAccounts.value = response.riotAccounts;
-    const riotAccountLogs = useCachedData<JimRiotAccountLog[]>(`user:${name}:riot-accounts:logs`);
-    riotAccountLogs.push(...response.newRiotAccountLogs);
+    if (response.newRiotAccountLogs.length > 0) {
+      const riotAccountLogs = useCachedData<JimRiotAccountLog[]>(`user:${name}:riot-accounts:logs`);
+      riotAccountLogs.push(...response.newRiotAccountLogs);
+    }
     toast.add({
       avatar: toastImage,
       orientation: "horizontal",
