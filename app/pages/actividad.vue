@@ -120,7 +120,7 @@ onUnmounted(() => {
             </div>
             <UPopover mode="hover" :content="{ side: 'top' }" arrow>
               <UButton variant="link" color="neutral" class="text-sm text-muted p-0">
-                {{ useTimeAgoIntl(log.createdAt, { locale: "es" }) }}
+                {{ useTimeAgoIntl(log.createdAt, { locale: "es", relativeTimeFormatOptions: { style: "long" } }) }}
               </UButton>
               <template #content>
                 <NuxtTime

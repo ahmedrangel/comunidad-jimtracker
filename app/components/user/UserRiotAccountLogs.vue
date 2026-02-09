@@ -140,6 +140,9 @@ watch(enrichedLogs, () => {
           </div>
           <UPopover mode="hover" :content="{ side: 'top' }" arrow>
             <UButton variant="link" color="neutral" class="text-xs text-muted p-0">
+              <span>{{ useTimeAgoIntl(log.createdAt, { locale: "es", relativeTimeFormatOptions: { style: "long" } }) }}</span>
+            </UButton>
+            <template #content>
               <NuxtTime
                 :datetime="log.createdAt"
                 year="numeric"
@@ -148,9 +151,6 @@ watch(enrichedLogs, () => {
                 hour="2-digit"
                 minute="2-digit"
               />
-            </UButton>
-            <template #content>
-              <span> {{ useTimeAgoIntl(log.createdAt, { locale: "es" }) }} </span>
             </template>
           </UPopover>
         </div>
