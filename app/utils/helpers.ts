@@ -20,7 +20,8 @@ export const getCountryName = (emoji: string) => {
 
 const errorMap: Record<string, string> = {
   riot_account_already_linked: "La cuenta de Riot ya se ha vinculado o está vinculada a otro usuario.",
-  riot_link_failed: "No se pudo vincular la cuenta de Riot."
+  riot_link_failed: "No se pudo vincular la cuenta de Riot.",
+  riot_region_not_supported: "La región de esta cuenta de Riot no es soportada actualmente."
 };
 
 export const getErrorMessage = (code: string): string => {
@@ -33,28 +34,8 @@ export const toastImage: AvatarProps = {
   ui: { image: "light:invert" }
 };
 
-export const regionMap = [
-  { label: "LAN", value: "LA1" },
-  { label: "LAS", value: "LA2" },
-  { label: "NA", value: "NA1" },
-  { label: "EUW", value: "EUW1" },
-  { label: "EUNE", value: "EUN1" },
-  { label: "BR", value: "BR1" },
-  { label: "KR", value: "KR" },
-  { label: "JP", value: "JP1" },
-  { label: "OCE", value: "OC1" },
-  { label: "TR", value: "TR1" },
-  { label: "RU", value: "RU" },
-  { label: "PH", value: "PH2" },
-  { label: "SEA", value: "SG2" },
-  { label: "TH", value: "TH2" },
-  { label: "TW", value: "TW2" },
-  { label: "VN", value: "VN2" },
-  { label: "ME", value: "ME1" }
-];
-
 export const getRegionLabel = (value: string): string => {
-  const region = regionMap.find(r => r.value === value);
+  const region = regionMap.find(r => r.value.toLowerCase() === value.toLowerCase());
   return region ? region.label : "Unknown";
 };
 

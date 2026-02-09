@@ -33,3 +33,23 @@ const apexTiers = ["CHALLENGER", "GRANDMASTER", "MASTER"];
 export const isApexTier = (tier: string | null) => {
   return tier ? apexTiers.includes(tier) : false;
 };
+
+export const regionMap = [
+  { label: "LAN", value: "LA1" },
+  { label: "LAS", value: "LA2" },
+  { label: "NA", value: "NA1" },
+  { label: "EUW", value: "EUW1" },
+  { label: "EUNE", value: "EUN1" },
+  { label: "BR", value: "BR1" },
+  { label: "KR", value: "KR" },
+  { label: "JP", value: "JP1" },
+  { label: "OCE", value: "OC1" },
+  { label: "TR", value: "TR1" },
+  { label: "RU", value: "RU" },
+  { label: "PH", value: "PH2" },
+  { label: "SEA", value: "SG2" },
+  { label: "TH", value: "TH2" },
+  { label: "TW", value: "TW2" },
+  { label: "VN", value: "VN2" },
+  { label: "ME", value: "ME1" }
+];

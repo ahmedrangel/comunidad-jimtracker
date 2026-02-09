@@ -29,6 +29,12 @@ export default defineOAuthRiotGamesEventHandler({
       return sendRedirect(event, withQuery(userURL, { error: "riot_account_already_linked" }));
     }
 
+    const regionSupported = regionMap.some(r => r.value.toLowerCase() === cpid.toLowerCase());
+
+    if (!regionSupported) {
+      return sendRedirect(event, withQuery(userURL, { error: "riot_region_not_supported" }));
+    }
+
     const [summoner, leagueData] = await Promise.all([
       lol.Summoner.getByPUUID(result.user.puuid, cpid),
       lol.League.byPUUID(result.user.puuid, cpid).catch(() => null)
