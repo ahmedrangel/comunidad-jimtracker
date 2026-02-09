@@ -6,9 +6,11 @@ export default defineEventHandler(async (event) => {
     puuid: z.string()
   }).parse);
 
+  const rolesEnum = ["top", "jungle", "mid", "adc", "support", "fill"] as const;
+
   const body = await readValidatedBody(event, z.object({
-    role1: z.string().nullable(),
-    role2: z.string().nullable()
+    role1: z.enum(rolesEnum).nullable(),
+    role2: z.enum(rolesEnum).nullable()
   }).parse);
 
   if (params.name !== user.twitchLogin) {

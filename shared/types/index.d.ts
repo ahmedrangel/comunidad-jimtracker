@@ -26,8 +26,8 @@ declare global {
     losses: number | null;
     profileIcon: number | null;
     verified: boolean;
-    role1: string | null;
-    role2: string | null;
+    role1: JimRiotRoles | null;
+    role2: JimRiotRoles | null;
     createdAt: number;
     updatedAt: number;
   }
@@ -52,6 +52,8 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
+
+  type JimRiotRoles = "top" | "jungle" | "mid" | "adc" | "support" | "fill";
 }
 
 export {};
