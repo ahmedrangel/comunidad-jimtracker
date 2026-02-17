@@ -79,9 +79,7 @@ export default defineNuxtConfig({
     },
     oauth: {
       riotgames: {
-        apiKey: "",
-        clientId: "",
-        clientSecret: ""
+        apiKey: ""
       }
     }
   },
