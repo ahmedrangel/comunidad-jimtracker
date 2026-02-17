@@ -3,7 +3,10 @@ const config = useRuntimeConfig();
 const buildInfo = config.public.buildInfo;
 
 const timeAgo = useTimeAgoIntl(buildInfo.time, {
-  locale: "es"
+  locale: "es",
+  relativeTimeFormatOptions: {
+    style: "long"
+  }
 });
 </script>
 
