@@ -97,7 +97,7 @@ const columns: TableColumn<JimTableData>[] = [
         "modelValue": preferences.value.region,
         "onUpdate:modelValue": (value: string) => {
           preferences.value.region = value;
-          const column = table.value?.tableApi?.getColumn("region");
+          const column = table.value?.tableApi.getColumn("region");
           if (value === "ALL") {
             column?.setFilterValue(undefined);
           }
@@ -201,20 +201,18 @@ const preferences = ref({
 });
 
 watch(() => preferences.value.hideUnrankeds, (newValue) => {
-  if (!table.value?.tableApi) return;
   localStorage.setItem("pref-hide-unrankeds", String(newValue));
-  const eloColumn = table.value.tableApi.getColumn("elo");
+  const eloColumn = table.value?.tableApi.getColumn("elo");
   if (eloColumn) {
     eloColumn.setFilterValue(newValue ? true : undefined);
   }
   // reset to first page when toggling
-  table.value.tableApi.setPageIndex(0);
+  table.value?.tableApi.setPageIndex(0);
 });
 
 watch([debouncedSearch, () => preferences.value.country], ([search, country]) => {
-  if (!table.value?.tableApi) return;
-  table.value.tableApi.getColumn("account")?.setFilterValue({ country, search: noSpaced(search) });
-  table.value.tableApi.setPageIndex(0);
+  table.value?.tableApi.getColumn("account")?.setFilterValue({ country, search: noSpaced(search) });
+  table.value?.tableApi.setPageIndex(0);
 });
 
 onMounted(() => {
@@ -222,8 +220,8 @@ onMounted(() => {
   preferences.value.hideUnrankeds = hideUnrankeds === "true";
 
   nextTick(() => {
-    if (preferences.value.hideUnrankeds && table.value?.tableApi) {
-      table.value.tableApi.getColumn("elo")?.setFilterValue(true);
+    if (preferences.value.hideUnrankeds) {
+      table.value?.tableApi.getColumn("elo")?.setFilterValue(true);
     }
   });
 });
@@ -234,16 +232,15 @@ const pagination = ref({
 });
 
 const paginationDisplay = computed(() => {
-  if (!table.value?.tableApi) return { start: 0, end: 0, total: 0 };
-  const pageIndex = table.value.tableApi.getState().pagination.pageIndex || 0;
-  const total = table.value.tableApi.getFilteredRowModel().rows.length || 0;
+  const pageIndex = table.value?.tableApi.getState().pagination.pageIndex || 0;
+  const total = table.value?.tableApi.getFilteredRowModel().rows.length || 0;
   const start = Math.min(pageIndex * pagination.value.pageSize + 1, total);
   const end = Math.min((pageIndex + 1) * pagination.value.pageSize, total);
   return { start, end, total };
 });
 
 const setPage = (page: number) => {
-  table.value?.tableApi?.setPageIndex(page - 1);
+  table.value?.tableApi.setPageIndex(page - 1);
   window.scrollTo({ top: 0, behavior: "instant" });
 };
 
@@ -331,7 +328,7 @@ const countriesSetItems = Array.from(countriesSet).map(country => ({
           Mostrando {{ paginationDisplay.start }} - {{ paginationDisplay.end }} de {{ paginationDisplay.total }}
         </div>
         <UPagination
-          v-if="table.tableApi && table.tableApi.getFilteredRowModel().rows.length > pagination.pageSize"
+          v-if="table.tableApi.getFilteredRowModel().rows.length > pagination.pageSize"
           :page="(table.tableApi.getState().pagination.pageIndex || 0) + 1"
           :items-per-page="pagination.pageSize"
           :total="table.tableApi.getFilteredRowModel().rows.length || 0"
