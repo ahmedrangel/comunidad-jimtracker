@@ -128,7 +128,6 @@ export default defineEventHandler(async (event) => {
     await setUserSession(event, { user: newUserSessionData });
   }
 
-
   return {
     user: userResults,
     riotAccounts: riotAccountResults,
