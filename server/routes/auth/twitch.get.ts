@@ -11,14 +11,16 @@ export default defineOAuthTwitchEventHandler({
       twitchLogin: twitch.login,
       twitchDisplay: twitch.display_name,
       twitchProfileImage: twitch.profile_image_url,
-      country: countries.find(c => c.code === countryCode)?.emoji || null
+      country: countries.find(c => c.code === countryCode)?.emoji || null,
+      lastLoggedInAt: unixepoch({ mode: "ms" })
     }).onConflictDoUpdate({
       target: tables.users.twitchId,
       set: {
         twitchLogin: twitch.login,
         twitchDisplay: twitch.display_name,
         twitchProfileImage: twitch.profile_image_url,
-        updatedAt: unixepoch({ mode: "ms" })
+        updatedAt: unixepoch({ mode: "ms" }),
+        lastLoggedInAt: unixepoch({ mode: "ms" })
       }
     }).returning().get();
 

@@ -13,7 +13,8 @@ export const users = sqliteTable("users", {
   bio: text(),
   badges: text().$type<string[]>(),
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
-  updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))
+  updatedAt: integer().notNull().default(unixepoch({ mode: "ms" })),
+  lastLoggedInAt: integer()
 }, table => [
   index("users_twitch_login_idx").on(table.twitchLogin),
   index("users_updated_at_idx").on(table.updatedAt)

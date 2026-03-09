@@ -50,6 +50,13 @@
       "when": 1770199543025,
       "tag": "0006_calm_wolfpack",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1773067650129,
+      "tag": "0007_cold_ironclad",
+      "breakpoints": true
     }
   ]
 }

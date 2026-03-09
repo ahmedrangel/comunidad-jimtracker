@@ -11,6 +11,7 @@ declare global {
     badges: string[] | null;
     createdAt: number;
     updatedAt: number;
+    lastLoggedInAt: number | null;
   }
 
   interface JimRiotAccount {
@@ -35,7 +36,7 @@ declare global {
   interface JimTableData extends Omit<JimRiotAccount, "twitchId" | "verified" | "createdAt" | "updatedAt"> {
     rank: number;
     eloValue: number;
-    user: Omit<JimUser, "twitchCumulativeMonths" | "twitchSubExpiration" | "badges" | "createdAt">;
+    user: Omit<JimUser, "twitchCumulativeMonths" | "twitchSubExpiration" | "badges" | "createdAt" | "lastLoggedInAt">;
   }
 
   interface JimRiotAccountLogData {
