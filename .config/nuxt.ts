@@ -9,7 +9,8 @@ export default defineNuxtConfig({
     "@nuxtjs/sitemap",
     "@nuxthub/core",
     "nuxt-auth-utils",
-    "nuxt-twemoji"
+    "nuxt-twemoji",
+    "nuxt-ui-colors-no-inline"
   ],
 
   $production: {
@@ -70,6 +71,10 @@ export default defineNuxtConfig({
     fonts: false,
     theme: {
       colors: ["primary", "success", "info", "error"]
+    },
+    colors: {
+      neutral: "zinc",
+      primary: "emerald"
     }
   },
 
@@ -83,10 +88,6 @@ export default defineNuxtConfig({
         apiKey: ""
       }
     }
-  },
-
-  routeRules: {
-    "/api/_nuxt_icon/**": { cache: { maxAge: 1.577e+7 } }
   },
 
   features: {
@@ -127,16 +128,6 @@ export default defineNuxtConfig({
       casing: "snake_case"
     },
     cache: true
-  },
-
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          silenceDeprecations: ["color-functions", "import", "global-builtin"]
-        }
-      }
-    }
   },
 
   eslint: {

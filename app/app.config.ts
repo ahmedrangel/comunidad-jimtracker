@@ -1,9 +1,5 @@
 export default defineAppConfig({
   ui: {
-    colors: {
-      neutral: "zinc",
-      primary: "emerald"
-    },
     popover: {
       slots: {
         arrow: "fill-current",
