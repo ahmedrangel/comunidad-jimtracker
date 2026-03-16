@@ -50,7 +50,7 @@ const addRiotAccount = async () => {
     }
 
     await navigateTo("/auth/riot", { external: true });
-  }).catch(() => {
+  }).catch(() => null).finally(() => {
     verifying.value = false;
   });
 };
