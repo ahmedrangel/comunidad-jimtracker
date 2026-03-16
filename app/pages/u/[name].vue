@@ -30,7 +30,7 @@ const maxAccounts = 4;
 
 const addRiotAccount = async () => {
   verifying.value = true;
-  $fetch<{ isFollowing: boolean }>(`/api/users/${name}/verify-follow`).catch((e) => {
+  $fetch<{ verified: boolean }>(`/api/users/${name}/verify-follow`).catch((e) => {
     toast.add({
       avatar: toastImage,
       orientation: "horizontal",
@@ -39,11 +39,11 @@ const addRiotAccount = async () => {
     });
     return null;
   }).then(async (response) => {
-    if (!response?.isFollowing) {
+    if (!response?.verified) {
       toast.add({
         avatar: toastImage,
         orientation: "horizontal",
-        description: "Debes seguir a JimRsng en Twitch para agregar una cuenta.",
+        description: "Debes haber seguido a JimRsng en Twitch por al menos 7 días para agregar una cuenta.",
         color: "error"
       });
       return;

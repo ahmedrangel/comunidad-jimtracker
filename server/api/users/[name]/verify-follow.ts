@@ -25,7 +25,11 @@ export default defineEventHandler(async (event) => {
     const { accessToken, refreshToken, expiresIn, scope } = await refreshUserToken(config.oauth.twitch.clientId, config.oauth.twitch.clientSecret, moderator.refreshToken);
     const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
     const twitch = new ApiClient({ authProvider: provider });
-    const isFollowing = await twitch.channels.getChannelFollowers(SITE.twitchId, twitchId).then(({ data }) => data?.[0]?.userId === twitchId).catch(() => true);
+    const maxTimeFollowing = 1000 * 60 * 60 * 24 * 7; // 7 días
+    const channelFollowers = await twitch.channels.getChannelFollowers(SITE.twitchId, twitchId).catch(() => null);
+    const followerData = channelFollowers?.data?.find(follower => follower.userId === twitchId);
+    const timeFollowing = Date.now() - (followerData?.followDate?.getTime() || 0);
+    const verified = followerData && timeFollowing >= maxTimeFollowing;
     if (refreshToken && expiresIn) {
       await db.update(tables.channelModerators).set({
         accessToken,
@@ -34,10 +38,10 @@ export default defineEventHandler(async (event) => {
         updatedAt: unixepoch({ mode: "ms" })
       }).where(eq(tables.channelModerators.twitchId, moderator.twitchId)).run();
     }
-    if (isFollowing) {
-      return { isFollowing: true };
+    if (verified) {
+      return { verified: true };
     }
   }
 
-  return { isFollowing: false };
+  return { verified: false };
 });
