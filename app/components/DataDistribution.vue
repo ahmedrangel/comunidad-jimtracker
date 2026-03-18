@@ -73,8 +73,6 @@ const roleStats = computed(() => {
     }
   }
 
-  const roleOrder = ["top", "jungle", "mid", "adc", "support", "fill"];
-
   return Array.from(stats.entries())
     .map(([role, count]) => ({
       role,

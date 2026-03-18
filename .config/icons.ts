@@ -30,5 +30,6 @@ export default [
   "lucide:arrow-right",
   "lucide:trending-up",
   "lucide:trending-down",
-  "lucide:smile-plus"
+  "lucide:smile-plus",
+  "lucide:circle-dashed"
 ];

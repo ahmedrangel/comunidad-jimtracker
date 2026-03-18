@@ -12,7 +12,8 @@ const props = defineProps<{
 const { user } = useUserSession();
 
 const UButton = resolveComponent("UButton");
-const USelect = resolveComponent("USelect");
+const USelectMenu = resolveComponent("USelectMenu");
+const Icon = resolveComponent("Icon");
 
 const TableCellRank = resolveComponent("TableCellRank");
 const TableCellAccounts = resolveComponent("TableCellAccounts");
@@ -93,7 +94,7 @@ const columns: TableColumn<JimTableData>[] = [
         label: getRegionLabel(region),
         value: region
       }));
-      return h(USelect, {
+      return h(USelectMenu, {
         "modelValue": preferences.value.region,
         "onUpdate:modelValue": (value: string) => {
           preferences.value.region = value;
@@ -105,10 +106,13 @@ const columns: TableColumn<JimTableData>[] = [
             column?.setFilterValue(value);
           }
         },
+        "clear": true,
+        "placeholder": "Región",
         "color": "neutral",
         "variant": "subtle",
-        "class": "min-w-24",
-        "items": [{ label: "Región", value: "ALL" }, ...uniqueRegionMap]
+        "value-key": "value",
+        "items": uniqueRegionMap,
+        "search-input": { placeholder: "Buscar..." }
       });
     },
     cell: ({ row }) => h(TableCellRegion, { data: row.original }),
@@ -116,8 +120,59 @@ const columns: TableColumn<JimTableData>[] = [
   },
   {
     accessorKey: "roles",
-    header: "Roles",
-    cell: ({ row }) => h(TableCellRoles, { data: row.original })
+    header: (data) => {
+      const tableData = data.table.options.data as JimTableData[];
+      const rolesSet = new Set<string>();
+      for (const item of tableData) {
+        if (item.role1) rolesSet.add(item.role1);
+        if (item.role2) rolesSet.add(item.role2);
+      }
+      const availableRoles = Array.from(rolesSet).map(role => ({
+        label: role.toUpperCase(),
+        value: role
+      })).sort((a, b) => {
+        const indexA = roleOrder.indexOf(a.value);
+        const indexB = roleOrder.indexOf(b.value);
+        return indexA - indexB;
+      });
+
+      return h(USelectMenu, {
+        "modelValue": preferences.value.role,
+        "onUpdate:modelValue": (value: string) => {
+          preferences.value.role = value;
+          const column = table.value?.tableApi.getColumn("roles");
+          if (!value || value.length === 0) {
+            column?.setFilterValue(undefined);
+          }
+          else {
+            column?.setFilterValue(value);
+          }
+        },
+        "clear": true,
+        "placeholder": "Roles",
+        "class": "min-w-28",
+        "items": availableRoles,
+        "color": "neutral",
+        "variant": "subtle",
+        "value-key": "value",
+        "search-input": { placeholder: "Buscar..." }
+      }, {
+        "leading": h(Icon, {
+          name: preferences.value.role ? `lol:${preferences.value.role}` : "lucide:circle-dashed",
+          class: "w-4 h-4"
+        }),
+        "item-leading": ({ item }: { item: { value: string } }) => h(Icon, {
+          name: `lol:${item.value}`,
+          class: "w-4 h-4"
+        })
+      });
+    },
+    cell: ({ row }) => h(TableCellRoles, { data: row.original }),
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue || filterValue.length === 0) return true;
+      const roleValue = filterValue;
+      return roleValue.includes(row.original.role1) || roleValue.includes(row.original.role2);
+    }
   },
   {
     id: "elo",
@@ -196,8 +251,9 @@ const meta: TableMeta<any> = {
 
 const preferences = ref({
   hideUnrankeds: false,
-  region: "ALL",
-  country: ""
+  region: "",
+  country: "",
+  role: ""
 });
 
 watch(() => preferences.value.hideUnrankeds, (newValue) => {

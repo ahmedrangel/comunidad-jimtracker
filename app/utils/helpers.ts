@@ -55,3 +55,5 @@ export const getFixedTwitchDisplayName = (displayName: string, login: string) =>
   }
   return `${displayName} (${login})`;
 };
+
+export const roleOrder = ["top", "jungle", "mid", "adc", "support", "fill"];
