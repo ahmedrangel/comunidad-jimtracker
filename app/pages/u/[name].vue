@@ -23,6 +23,12 @@ const { data: riotAccounts } = await useFetch(`/api/users/${name}/riot-accounts`
   deep: true
 });
 
+const { data: tableData } = await useFetch("/api/riot-accounts", {
+  key: "riot-accounts",
+  getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key],
+  default: () => [] as JimTableData[]
+});
+
 const toast = useToast();
 const isUpdating = ref(false);
 const verifying = ref(false);
@@ -199,7 +205,8 @@ onUnmounted(() => {
                   >
                     <span>{{ account.gameName }} <span class="font-normal text-muted">#{{ account.tagLine }}</span></span>
                   </NuxtLink>
-                  <RegionBadge :region="account.region" size="md" />
+                  <RegionBadge :region="account.region" size="lg" />
+                  <RankBadge v-if="tableData.find(item => item.puuid === account.puuid)?.rank" :rank="tableData.find(item => item.puuid === account.puuid)?.rank!" />
                 </div>
                 <div v-if="isOwner" class="absolute top-2 right-2 text-xs rounded">
                   <div class="flex items-center gap-1">
