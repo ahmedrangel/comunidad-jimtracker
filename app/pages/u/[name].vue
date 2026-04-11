@@ -205,6 +205,7 @@ onUnmounted(() => {
                   >
                     <span>{{ account.gameName }} <span class="font-normal text-muted">#{{ account.tagLine }}</span></span>
                   </NuxtLink>
+                  <CopyButton :value="`${account.gameName}#${account.tagLine}`" class="p-0" size="md" />
                   <RegionBadge :region="account.region" size="lg" />
                   <RankBadge v-if="tableData.find(item => item.puuid === account.puuid)?.rank" :rank="tableData.find(item => item.puuid === account.puuid)?.rank!" />
                 </div>

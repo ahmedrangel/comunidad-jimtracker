@@ -3,6 +3,7 @@ import { useClipboard } from "@vueuse/core";
 
 defineProps<{
   value: string;
+  size?: "md" | "xs" | "sm" | "lg" | "xl";
   tooltipSide?: "top" | "right" | "bottom" | "left";
 }>();
 
@@ -22,7 +23,7 @@ const tablePopover = useTablePopover();
 
 <template>
   <UButton
-    size="xs"
+    :size="size || 'xs'"
     :color="copied ? 'success' : 'neutral'"
     variant="link"
     :icon="copied ? 'lucide:copy-check' : 'lucide:copy'"
