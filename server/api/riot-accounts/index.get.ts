@@ -36,7 +36,15 @@ export default defineEventHandler(async () => {
       eloValue: eloToValue(riotData.tier, riotData.division, riotData.lp),
       user: { twitchId, twitchLogin, twitchDisplay, twitchProfileImage, bio, country, updatedAt: userUpdatedAt }
     };
-  }).sort((a, b) => a.gameName.localeCompare(b.gameName)).sort((a, b) => b.eloValue - a.eloValue).map((data, index) => ({
+  }).sort((a, b) => a.gameName.localeCompare(b.gameName)).sort((a, b) => {
+    const aWins = a.wins || 0;
+    const aLosses = a.losses || 0;
+    const bWins = b.wins || 0;
+    const bLosses = b.losses || 0;
+    const winrateA = aWins + aLosses > 0 ? aWins / (aWins + aLosses) : 0;
+    const winrateB = bWins + bLosses > 0 ? bWins / (bWins + bLosses) : 0;
+    return winrateB - winrateA;
+  }).sort((a, b) => b.eloValue - a.eloValue).map((data, index) => ({
     rank: index + 1,
     ...data
   }));
